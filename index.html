@@ -3,112 +3,234 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MacBook Checker</title>
+<title>Vistoria Mac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f1115; --panel:#171a21; --panel2:#1f232c; --line:#2a2f3a; --text:#e8eaf0; --muted:#9aa1b2;
-  --ok:#34c759; --fail:#ff453a; --warn:#ffb020; --accent:#4c8dff; --key:#232833; --keyon:#1f6f3a;
+  --bg:#0a0a0a; --bg-glow:rgba(205,245,90,.07);
+  --surface:#151515; --surface-2:#1e1e1e; --surface-3:#262626;
+  --line:rgba(255,255,255,.07); --line-strong:rgba(255,255,255,.14);
+  --text:#f5f5f2; --muted:#8d8d89; --faint:#5a5a57;
+  --accent:#d4f65c; --accent-ink:#0b0b0b; --accent-soft:rgba(212,246,92,.13);
+  --ok:#c4f05a; --ok-soft:rgba(196,240,90,.12);
+  --fail:#ff6b5e; --fail-soft:rgba(255,107,94,.12);
+  --warn:#ffc548; --warn-soft:rgba(255,197,72,.12);
+  --key:#1c1c1c; --key-line:#2c2c2c; --key-text:#b9b9b4;
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 20px 40px -24px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f2f2ef; --bg-glow:rgba(94,240,122,.16);
+  --surface:#ffffff; --surface-2:#f4f4f1; --surface-3:#ebebe7;
+  --line:rgba(0,0,0,.06); --line-strong:rgba(0,0,0,.12);
+  --text:#121212; --muted:#7a7a75; --faint:#b0b0aa;
+  --accent:#5ef07a; --accent-ink:#0b0b0b; --accent-soft:rgba(94,240,122,.18);
+  --ok:#1fae46; --ok-soft:rgba(31,174,70,.1);
+  --fail:#e5483b; --fail-soft:rgba(229,72,59,.09);
+  --warn:#d48a00; --warn-soft:rgba(212,138,0,.1);
+  --key:#ffffff; --key-line:#dcdcd6; --key-text:#55554f;
+  --shadow:0 1px 2px rgba(0,0,0,.04), 0 16px 32px -20px rgba(0,0,0,.12);
+  color-scheme:light;
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
-button{font:inherit;color:inherit;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
-button:hover{border-color:#3d4452}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-button.ok{background:rgba(52,199,89,.15);border-color:var(--ok)}
-button.fail{background:rgba(255,69,58,.15);border-color:var(--fail)}
-button:disabled{opacity:.5;cursor:default}
-.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
-nav{background:var(--panel);border-right:1px solid var(--line);padding:18px 10px;position:sticky;top:0;height:100vh;overflow:auto}
-nav h1{font-size:17px;margin:0 8px 16px}
-nav h1 small{display:block;font-weight:400;color:var(--muted);font-size:12px}
-nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--text);text-decoration:none;cursor:pointer}
-nav a.active{background:var(--panel2)}
-.navh{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 10px 4px}
-.big{font-size:22px;font-weight:600}
-.pill{display:inline-block;padding:4px 12px;border-radius:20px;background:var(--panel2);border:1px solid var(--line)}
-button.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.stat{display:flex;gap:28px;flex-wrap:wrap;margin:10px 0}
-.stat div b{display:block;font-size:28px}
-.stat div span{color:var(--muted);font-size:13px}
-.dot{width:10px;height:10px;border-radius:50%;background:#454b59;flex:none}
-.dot.ok{background:var(--ok)} .dot.fail{background:var(--fail)} .dot.warn{background:var(--warn)}
-main{padding:28px 36px 60px;max-width:1100px}
-h2{margin:0 0 6px;font-size:24px}
-.lead{color:var(--muted);margin:0 0 20px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 "Manrope",-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+  background-image:radial-gradient(1200px 520px at 50% -180px,var(--bg-glow),transparent 70%);background-repeat:no-repeat}
+button,input,textarea{font:inherit;color:inherit}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- topo ---------- */
+.wrap{max-width:1240px;margin:0 auto;padding:22px 28px 80px}
+.top{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.02em;cursor:pointer;white-space:nowrap}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
+.logo svg.i{width:19px;height:19px;stroke-width:2.6}
+.spacer{flex:1}
+.seg{display:flex;padding:4px;gap:2px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.seg button{border:0;background:none;padding:7px 14px;border-radius:999px;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;white-space:nowrap}
+.seg button svg.i{width:15px;height:15px}
+.seg button.on{background:var(--surface-3);color:var(--text)}
+.ring{--p:0;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:700;
+  background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--surface-3) 0)}
+.ring span{width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center}
+.topprog{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+
+.navbar{margin:18px 0 0;display:flex;justify-content:space-between;gap:4px;padding:5px;border-radius:999px;background:var(--surface);border:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.navbar::-webkit-scrollbar{display:none}
+.navbar a{display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;color:var(--muted);text-decoration:none;cursor:pointer;white-space:nowrap;font-size:13.5px;font-weight:500;position:relative;transition:background .15s,color .15s}
+.navbar a:hover{color:var(--text)}
+.navbar a.active{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.navbar a .st{width:6px;height:6px;border-radius:50%;background:transparent;margin-left:-1px}
+.navbar a .st:not(.ok):not(.fail):not(.warn){display:none}
+.navbar a svg.i{width:16px;height:16px}
+.navbar a .st.ok{background:var(--ok)} .navbar a .st.fail{background:var(--fail)} .navbar a .st.warn{background:var(--warn)}
+.navbar a.active .st{background:var(--accent-ink)!important;opacity:.55}
+.navbar .sep{width:1px;background:var(--line-strong);margin:6px 6px;flex:none}
+
+/* ---------- cabeçalho de página ---------- */
+.ph{display:flex;align-items:center;gap:16px;margin:34px 0 22px}
+.circle{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;color:var(--text)}
+.circle:hover{background:var(--surface)}
+.ph h1{margin:0;font-size:36px;font-weight:500;letter-spacing:-.035em;line-height:1.1}
+.ph p{margin:4px 0 0;color:var(--muted)}
+.ph .step{margin-left:auto;color:var(--muted);font-size:13px;white-space:nowrap}
+.eyebrow{color:var(--muted);font-size:14px;margin:34px 0 4px}
+.hello{font-size:44px;font-weight:500;letter-spacing:-.04em;margin:0 0 24px;line-height:1.1}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;position:relative}
+.grid>.card{margin-bottom:0}
+.card h3{margin:0 0 14px;font-size:16px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.card .corner{position:absolute;top:16px;right:16px;width:36px;height:36px}
+.label{color:var(--muted);font-size:13px}
+.num{font-size:40px;font-weight:600;letter-spacing:-.045em;line-height:1.05}
+.num small{font-size:20px;color:var(--muted);font-weight:500;letter-spacing:-.02em}
+.muted{color:var(--muted)} .faint{color:var(--faint)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.verdict{display:flex;gap:10px;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-.verdict span{color:var(--muted);margin-right:6px}
-table{border-collapse:collapse;width:100%}
-td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-td:first-child{color:var(--muted);width:42%}
-.alert{border-radius:10px;padding:10px 14px;margin:8px 0;border:1px solid}
-.alert.bad{border-color:var(--fail);background:rgba(255,69,58,.1)}
-.alert.warn{border-color:var(--warn);background:rgba(255,176,32,.1)}
-.alert.good{border-color:var(--ok);background:rgba(52,199,89,.1)}
-.muted{color:var(--muted)}
-code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-size:13px}
-pre{background:var(--panel2);padding:12px;border-radius:8px;overflow:auto;max-height:340px;font-size:12px}
+
+.btn{border:1px solid var(--line-strong);background:transparent;border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;transition:transform .08s,background .15s}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.dark{background:var(--text);border-color:var(--text);color:var(--bg)}
+.btn.lg{padding:14px 24px;font-size:15px}
+.btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.okb{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.btn.failb{background:var(--fail-soft);border-color:var(--fail);color:var(--fail)}
+.btn svg.i{width:16px;height:16px}
+
+.note{border-radius:16px;padding:13px 16px;margin:10px 0;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+.note svg.i{margin-top:2px}
+.note.bad{background:var(--fail-soft);color:var(--fail)} .note.bad b{color:var(--fail)}
+.note.warn{background:var(--warn-soft)} .note.warn svg.i{color:var(--warn)}
+.note.good{background:var(--ok-soft)} .note.good svg.i{color:var(--ok)}
+.note.info{background:var(--surface-2)} .note.info svg.i{color:var(--muted)}
+.note.bad span,.note.warn span,.note.good span{color:var(--text)}
+
+.tag{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.tag.ok{background:var(--ok-soft);color:var(--ok)} .tag.fail{background:var(--fail-soft);color:var(--fail)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)} .tag.pending{background:var(--surface-2);color:var(--muted)}
+.tag.na{background:var(--surface-2);color:var(--muted)}
+
+.kv{display:grid;grid-template-columns:minmax(150px,38%) 1fr;gap:0}
+.kv div{padding:12px 0;border-bottom:1px solid var(--line)}
+.kv div:nth-child(odd){color:var(--muted)}
+.kv div:nth-last-child(-n+2){border-bottom:0}
+pre{background:var(--surface-2);padding:14px;border-radius:14px;overflow:auto;max-height:340px;font-size:12px}
+details summary{cursor:pointer;color:var(--muted)}
+
+.bar{height:8px;background:var(--surface-3);border-radius:99px;overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .25s}
+.ticks{display:flex;gap:3px;align-items:flex-end;height:30px}
+.ticks i{flex:1;border-radius:2px;background:var(--surface-3);height:100%}
+.ticks i.on{background:var(--accent)} .ticks i.fail{background:var(--fail)} .ticks i.warn{background:var(--warn)}
+
+.gauge{--p:0;--c:var(--accent);width:118px;height:118px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--c) calc(var(--p)*1%),var(--surface-3) 0)}
+.gauge>div{width:96px;height:96px;border-radius:50%;background:var(--surface);display:grid;place-items:center;text-align:center;line-height:1.1}
+.gauge b{font-size:26px;letter-spacing:-.04em;font-weight:600}
+.gauge small{display:block;font-size:11px;color:var(--muted)}
+
+/* cards de teste na home */
+.tcard{cursor:pointer;transition:transform .12s,border-color .15s;display:flex;flex-direction:column;gap:14px;min-height:150px}
+.tcard:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.ticon{width:42px;height:42px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center}
+.tcard .t{font-weight:600;font-size:15.5px;letter-spacing:-.01em}
+.tcard .d{color:var(--muted);font-size:13px;line-height:1.4}
+.tcard .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+.tcard.hl{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tcard.hl .d{color:rgba(0,0,0,.6)} .tcard.hl .ticon{background:rgba(0,0,0,.1)} .tcard.hl .circle{border-color:rgba(0,0,0,.2);color:var(--accent-ink)}
+.section-t{display:flex;align-items:baseline;gap:10px;margin:30px 0 14px}
+.section-t h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.02em}
+
+/* resultado */
+.verdict{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px;padding:16px 16px 16px 22px;border-radius:24px;background:var(--surface);border:1px solid var(--line)}
+.verdict .q{font-weight:600;margin-right:6px}
 
 /* teclado */
-.kb{display:flex;flex-direction:column;gap:6px;background:#0b0d11;padding:14px;border-radius:12px;user-select:none}
+.kb{display:flex;flex-direction:column;gap:6px;background:var(--surface-2);padding:16px;border-radius:20px;user-select:none}
 .kr{display:flex;gap:6px}
-.k{flex:1 1 0;min-width:0;height:46px;background:var(--key);border:1px solid #303644;border-radius:7px;display:flex;align-items:flex-end;justify-content:flex-start;padding:5px 7px;font-size:12px;color:#c9cedb;transition:background .12s}
-.k.fn{height:30px;font-size:11px}
-.k.on{background:var(--keyon);border-color:var(--ok);color:#fff}
-.k.down{background:var(--ok);color:#000}
-.k.opt{border-style:dashed}
+.k{flex:1 1 0;min-width:0;height:50px;background:var(--key);border:1px solid var(--key-line);border-radius:9px;display:flex;align-items:flex-end;justify-content:flex-start;padding:6px 8px;font-size:12.5px;color:var(--key-text);transition:background .12s,color .12s,transform .06s;box-shadow:0 1px 0 var(--key-line)}
+.k.fn{height:32px;font-size:11px}
+.k.on{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+.k.down{background:var(--accent);color:var(--accent-ink);transform:translateY(1px)}
+.k.opt{border-style:dashed;opacity:.6}
 .stack{flex:1 1 0;display:flex;flex-direction:column;gap:3px}
-.stack .k{height:21.5px;padding:1px 6px;align-items:center;justify-content:center}
-.progress{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden;flex:1;min-width:120px}
-.progress i{display:block;height:100%;background:var(--ok);width:0;transition:width .2s}
-#keylog{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);min-height:20px}
+.stack .k{height:23.5px;padding:1px 6px;align-items:center;justify-content:center}
+.keylog{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);min-height:20px;margin-top:12px}
 
 /* trackpad */
-.tp{position:relative;height:380px;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#0b0d11;touch-action:none}
+.tp{position:relative;height:400px;border-radius:20px;overflow:hidden;background:var(--surface-2);touch-action:none;cursor:crosshair}
 .tp canvas{position:absolute;inset:0;width:100%;height:100%}
-.tp .hint{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:#555c6c;pointer-events:none}
-.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:14px}
-.chk{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--panel2)}
-.chk.done{outline:1px solid var(--ok)}
-.chk .dot{width:12px;height:12px}
+.tp .hint{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:var(--faint);pointer-events:none}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:14px}
+.chk{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:var(--surface-2);font-size:14px;color:var(--muted)}
+.chk .b{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--faint);display:grid;place-items:center;flex:none}
+.chk.done{color:var(--text)} .chk.done .b{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chk .b svg.i{width:12px;height:12px;stroke-width:3}
 
 /* tela cheia */
 #screen{position:fixed;inset:0;z-index:99;display:none;cursor:none}
-#screen .lbl{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:6px 14px;border-radius:20px;font-size:13px;transition:opacity .4s}
-.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.swatches i{width:36px;height:24px;border-radius:5px;border:1px solid var(--line)}
+#screen .lbl{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:8px 16px;border-radius:99px;font-size:13px;transition:opacity .4s;backdrop-filter:blur(8px)}
+.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.swatches i{width:44px;height:30px;border-radius:9px;border:1px solid var(--line-strong)}
 
-/* áudio/mic */
-.meter{height:16px;background:var(--panel2);border-radius:8px;overflow:hidden}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--warn) 70%,var(--fail))}
-video{width:100%;max-width:640px;border-radius:10px;background:#000;transform:scaleX(-1)}
+/* áudio */
+.sides{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:10px;margin-top:16px}
+.side{border:1px solid var(--line-strong);background:var(--surface-2);border-radius:20px;padding:22px 18px;cursor:pointer;text-align:center;transition:all .15s}
+.side b{display:block;font-size:20px;letter-spacing:-.02em;font-weight:600}
+.side span{color:var(--muted);font-size:13px}
+.side.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} .side.on span{color:rgba(0,0,0,.6)}
+.eq{display:flex;gap:4px;align-items:flex-end;height:34px}
+.eq i{width:5px;border-radius:3px;background:var(--accent);height:20%;transition:height .1s}
+input[type=range]{accent-color:var(--accent)}
 
-/* checklist manual */
-.mitem{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-.mitem .t{flex:1}
-.mitem .t small{display:block;color:var(--muted)}
-.seg{display:flex;gap:4px}
-.seg button{padding:4px 10px;font-size:13px}
+.meter{height:14px;background:var(--surface-3);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .06s}
+video{width:100%;max-width:720px;border-radius:20px;background:#000;transform:scaleX(-1);display:block}
+
+/* checklist */
+.mitem{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.mitem:last-child{border-bottom:0}
+.mitem .t{flex:1;font-weight:500}
+.mitem .t small{display:block;color:var(--muted);font-weight:400;font-size:13px}
+.mini{display:flex;gap:4px;padding:3px;border-radius:99px;background:var(--surface-2)}
+.mini button{border:0;background:none;padding:6px 12px;border-radius:99px;cursor:pointer;font-size:13px;color:var(--muted);font-weight:500}
+.mini button.ok{background:var(--ok);color:#0b0b0b} .mini button.fail{background:var(--fail);color:#fff} .mini button.na{background:var(--surface-3);color:var(--text)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--surface-2);font-size:13px;margin:3px 4px 3px 0}
 
 /* relatório */
-.rep td:last-child{text-align:right;white-space:nowrap}
-.tag{padding:2px 9px;border-radius:12px;font-size:13px}
-.tag.ok{background:rgba(52,199,89,.18);color:var(--ok)}
-.tag.fail{background:rgba(255,69,58,.18);color:var(--fail)}
-.tag.pending{background:var(--panel2);color:var(--muted)}
-.tag.warn{background:rgba(255,176,32,.18);color:var(--warn)}
+.score{display:flex;gap:26px;align-items:center}
+.score .big{font-size:46px;font-weight:600;letter-spacing:-.045em;line-height:1}
+.rl{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.rl:last-child{border-bottom:0}
+.rl .ticon{width:36px;height:36px;border-radius:12px}
+.rl .n{flex:1;font-weight:500}
+.rl .n small{display:block;color:var(--muted);font-weight:400;font-size:12.5px}
+textarea{width:100%;min-height:90px;background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:14px;resize:vertical}
 
-@media (max-width:820px){.app{grid-template-columns:1fr}nav{position:static;height:auto}main{padding:18px 16px}}
-@media print{nav,.verdict,button{display:none!important}.app{display:block}body{background:#fff;color:#000}.card{border-color:#ccc;background:#fff}}
+@media (max-width:980px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.wrap{padding:16px}.g4,.g3,.g2{grid-template-columns:1fr}.hello{font-size:32px}.ph h1{font-size:28px}.sides{grid-template-columns:1fr}.topprog .lbl{display:none}.seg button{padding:7px 10px}.seg button .tl{display:none}.navbar{justify-content:flex-start}}
+@media print{.navbar,.verdict,.btn,.seg,.circle{display:none!important}body{background:#fff;color:#000}.card{box-shadow:none;border-color:#ddd}}
 </style>
 </head>
 <body>
-<div class="app">
-  <nav id="nav">
-    <h1>💻 MacBook Checker<small>teste antes de comprar</small></h1>
-  </nav>
+<div class="wrap">
+  <header class="top">
+    <div class="brand" id="brand"><div class="logo"></div>Vistoria Mac</div>
+    <div class="spacer"></div>
+    <div class="topprog"><span class="lbl" id="progLbl"></span><div class="ring" id="ring"><span id="ringN"></span></div></div>
+    <div class="seg" id="theme"></div>
+  </header>
+  <nav class="navbar" id="nav"></nav>
   <main id="main"></main>
 </div>
 <div id="screen"><div class="lbl" id="screenLbl"></div></div>
@@ -116,86 +238,135 @@ video{width:100%;max-width:640px;border-radius:10px;background:#000;transform:sc
 <script src="info.js" onerror="window.SYSINFO=null"></script>
 <script>
 "use strict";
-/* ---------------- estado ---------------- */
+/* ================= ícones ================= */
+const ICONS={
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+  chip:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+  keyboard:'<rect x="2" y="6" width="20" height="12" rx="2.5"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+  monitor:'<rect x="2" y="4" width="20" height="13" rx="2.5"/><path d="M8 21h8M12 17v4"/>',
+  trackpad:'<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M4 15h16M12 15v6"/>',
+  volume:'<path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13"/>',
+  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/>',
+  camera:'<path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/>',
+  plug:'<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 01-12 0zM12 18v4"/>',
+  alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  wifi:'<path d="M2 9a15 15 0 0120 0M5 12.5a10 10 0 0114 0M8.5 16a5 5 0 017 0M12 20h.01"/>',
+  disk:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 14h18M7 17h.01M11 17h.01"/>',
+  flame:'<path d="M12 2s5 5 5 10a5 5 0 01-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-5 1-8.5z"/>',
+  report:'<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h8M9 17h6"/>',
+  arrow:'<path d="M7 17L17 7M8 7h9v9"/>', back:'<path d="M19 12H5M11 6l-6 6 6 6"/>', next:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',
+  check:'<path d="M5 12l5 5L20 7"/>', x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  play:'<path d="M7 4l13 8-13 8z"/>', pause:'<path d="M8 5v14M16 5v14"/>', repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 01-3 3H3"/>',
+  battery:'<rect x="2" y="7" width="18" height="10" rx="2.5"/><path d="M22 11v2M6 10v4M10 10v4"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 012-2h8"/>', print:'<path d="M6 9V3h12v6M6 17H4v-6h16v6h-2M8 14h8v7H8z"/>',
+  bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>', usb:'<path d="M12 2v14M8 6l4-4 4 4M7 12v2l5 3 5-3v-2"/><circle cx="12" cy="19" r="2"/>',
+};
+const ico=(n,cls="")=>`<svg class="i ${cls}" viewBox="0 0 24 24">${ICONS[n]||""}</svg>`;
+
+/* ================= estado ================= */
 const TESTS = [
-  {id:"sistema",  name:"Sistema e bateria", icon:"🧾"},
-  {id:"teclado",  name:"Teclado",           icon:"⌨️"},
-  {id:"tela",     name:"Tela e cores",      icon:"🖥️"},
-  {id:"trackpad", name:"Trackpad",          icon:"👆"},
-  {id:"audio",    name:"Alto-falantes",     icon:"🔊"},
-  {id:"mic",      name:"Microfone",         icon:"🎙️"},
-  {id:"camera",   name:"Câmera",            icon:"📷"},
-  {id:"extras",   name:"Portas e físico",   icon:"🔌"},
-  {id:"travamentos",name:"Travamentos",     icon:"💥", adv:1},
-  {id:"wifi",     name:"Velocidade Wi-Fi",  icon:"📶", adv:1},
-  {id:"ssd",      name:"Velocidade do SSD", icon:"💾", adv:1},
-  {id:"estresse", name:"Teste de estresse", icon:"🔥", adv:1},
-  {id:"relatorio",name:"Relatório",         icon:"📋"},
+  {id:"inicio",    name:"Início",           icon:"home",    home:1},
+  {id:"sistema",   name:"Ficha do Mac", short:"Ficha",     icon:"chip",    desc:"Modelo, bateria, SSD e bloqueios de iCloud e empresa."},
+  {id:"teclado",   name:"Teclado",          icon:"keyboard",desc:"Aperte todas as teclas, uma por uma."},
+  {id:"tela",      name:"Tela e cores", short:"Tela",     icon:"monitor", desc:"Tela cheia em várias cores para achar pixel morto e manchas."},
+  {id:"trackpad",  name:"Trackpad",         icon:"trackpad",desc:"Cliques, gestos e mapa de pontos mortos."},
+  {id:"audio",     name:"Som",              icon:"volume",  desc:"Música no lado esquerdo, direito e nos dois."},
+  {id:"mic",       name:"Microfone",        icon:"mic",     desc:"Grave 5 segundos e escute."},
+  {id:"camera",    name:"Câmera",           icon:"camera",  desc:"Imagem ao vivo e luz verde acendendo."},
+  {id:"extras",    name:"Portas e estado", short:"Portas",  icon:"plug",    desc:"Carregador, USB-C e o que dá pra ver no olho."},
+  {id:"travamentos",name:"Travamentos",     icon:"alert",   desc:"Procura registros de quando o Mac reiniciou sozinho.", adv:1},
+  {id:"wifi",      name:"Wi-Fi",            icon:"wifi",    desc:"Velocidade da internet pela antena do Mac.", adv:1},
+  {id:"ssd",       name:"SSD",              icon:"disk",    desc:"Velocidade de gravação do armazenamento.", adv:1},
+  {id:"estresse",  name:"Estresse",         icon:"flame",   desc:"Processador no máximo por 90 segundos.", adv:1},
+  {id:"relatorio", name:"Relatório",        icon:"report",  home:1},
 ];
+const STEPS = TESTS.filter(t=>!t.home);
 const MANUAL = [
-  ["charge","Carrega na tomada","Ícone de raio na bateria; teste o carregador que vem junto."],
-  ["ports","Todas as portas USB-C / Thunderbolt","Teste carregar ou ligar um pendrive em CADA porta."],
+  ["charge","Carrega na tomada","Aparece o raio no ícone da bateria. Teste com o carregador que vem junto."],
+  ["ports","Todas as portas USB-C funcionam","Use o painel acima: carregador e pendrive em cada porta."],
   ["magsafe","MagSafe (se tiver)","A luz do conector acende e o Mac carrega."],
-  ["jack","Saída de fone (P2)","Ligue um fone com fio e toque um som."],
-  ["wifi","Wi-Fi conecta","Abra um site qualquer."],
-  ["bt","Bluetooth encontra aparelhos","Ajustes do Sistema → Bluetooth: aparece seu celular/fone?"],
-  ["touchid","Touch ID","Ajustes → Touch ID e Senha → adicionar digital."],
-  ["backlight","Luz do teclado","Aumente/diminua no Centro de Controle num lugar escuro."],
+  ["jack","Entrada de fone","Ligue um fone com fio e toque a música da etapa Som."],
+  ["bt","Bluetooth acha aparelhos","Ajustes do Sistema → Bluetooth: aparece o seu celular ou fone?"],
+  ["touchid","Touch ID (leitor de digital)","Ajustes do Sistema → Touch ID e Senha → Adicionar digital."],
+  ["touchbar","Touch Bar (só no Pro que tem)","Deslize o dedo de ponta a ponta: tudo responde, sem mancha nem parte apagada."],
+  ["backlight","Luz do teclado","Num lugar mais escuro, aumente e diminua pela Central de Controle."],
   ["brightness","Brilho da tela","Vai do mínimo ao máximo sem piscar."],
-  ["hinge","Dobradiça firme","A tela fica parada em qualquer ângulo, sem estalos."],
-  ["body","Carcaça sem amassados","Fecha alinhado, sem tampa empenada, sem parafusos faltando."],
-  ["coating","Tela sem manchas no antirreflexo","Com tela apagada, procure manchas/descascados."],
-  ["fan","Ventoinha sem barulho estranho","Abra vários apps; não deve chiar nem raspar."],
-  ["icloud","Sem conta iCloud do vendedor","Ajustes do Sistema → topo: ninguém logado; \"Buscar Mac\" desligado."],
-  ["touchbar","Touch Bar (só MacBook Pro com Touch Bar)","Passe o dedo de ponta a ponta; tudo responde, sem manchas ou partes apagadas."],
-  ["serial","Nº de série confere","O da aba Sistema bate com o gravado embaixo do Mac e com a caixa/nota."],
-  ["liquid","Sem sinal de líquido","Lanterna do celular dentro das portas: nada de corrosão verde/branca."],
-  ["diag","Apple Diagnostics sem erro","Desligue, segure o botão de ligar até \"Opções\", depois ⌘D. Anote o código se aparecer."],
+  ["hinge","Dobradiça firme","A tela fica parada em qualquer ângulo, sem estalo."],
+  ["body","Carcaça inteira","Sem amassado, tampa fecha alinhada, sem parafuso faltando."],
+  ["coating","Tela sem descascado","Com a tela apagada, procure manchas na película antirreflexo."],
+  ["fan","Ventoinha silenciosa","Com vários apps abertos, não pode chiar nem raspar (o Air não tem ventoinha)."],
+  ["serial","Número de série confere","O da Ficha do Mac bate com o gravado embaixo e com a caixa ou nota."],
+  ["liquid","Sem sinal de líquido","Lanterna do celular dentro das portas: nada de ferrugem verde ou branca."],
+  ["icloud","Sem conta do vendedor","Ajustes do Sistema → topo: ninguém logado e \"Buscar Mac\" desligado."],
+  ["diag","Diagnóstico da Apple sem erro","Desligue, segure o botão de ligar até aparecer \"Opções\" e aperte ⌘D. Anote o código se aparecer."],
 ];
 let state = {results:{}, manual:{}, details:{}, notes:""};
 try{ const s = JSON.parse(localStorage.getItem("mbc-state")||"null"); if(s) state = Object.assign(state,s); }catch(e){}
-function save(){ try{ localStorage.setItem("mbc-state", JSON.stringify(state)); }catch(e){} renderNav(); }
+function persist(){ try{ localStorage.setItem("mbc-state", JSON.stringify(state)); }catch(e){} }
+function save(){ persist(); renderChrome(); }
 function setResult(id, v){ state.results[id]=v; save(); const vd=document.querySelector(".verdict"); if(vd) vd.replaceWith(verdict(id)); }
+function setDetail(id,txt){ state.details[id]=txt; save(); }
 
-let current = (location.hash||"#sistema").slice(1);
-if(!TESTS.find(t=>t.id===current)) current="sistema";
+let theme="dark"; try{ theme=localStorage.getItem("mbc-theme")||"dark"; }catch(e){}
+document.documentElement.dataset.theme=theme;
+
+let current = (location.hash||"#inicio").slice(1);
+if(!TESTS.find(t=>t.id===current)) current="inicio";
 let cleanup = null;
 
 const $ = (s,el=document)=>el.querySelector(s);
 const h = (html)=>{ const t=document.createElement("template"); t.innerHTML=html.trim(); return t.content.firstElementChild; };
 const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LBL={ok:"Tudo certo",fail:"Com defeito",warn:"Atenção",pending:"Não testado",na:"Não tem"};
+const note=(kind,html)=>`<div class="note ${kind}">${ico(kind==="good"?"check":kind==="info"?"info":"alert")}<span>${html}</span></div>`;
 
 function statusOf(id){
   if(id==="extras"){
     const vals = MANUAL.map(m=>state.manual[m[0]]).filter(Boolean);
     if(vals.includes("fail")) return "fail";
-    if(vals.length && vals.length === MANUAL.length) return "ok";
+    if(vals.length===MANUAL.length) return "ok";
     return vals.length ? "warn" : "pending";
   }
-  if(id==="relatorio") return "pending";
   return state.results[id] || "pending";
 }
-function renderNav(){
-  const nav = $("#nav");
-  nav.querySelectorAll("a,.navh").forEach(a=>a.remove());
+const doneCount=()=>STEPS.filter(t=>statusOf(t.id)!=="pending").length;
+
+function renderChrome(){
+  const nav=$("#nav"); nav.innerHTML="";
   TESTS.forEach((t,i)=>{
-    if(t.adv && !TESTS[i-1].adv) nav.appendChild(h(`<div class="navh">Avançado · deixe pro final</div>`));
-    if(!t.adv && i && TESTS[i-1].adv) nav.appendChild(h(`<div class="navh">&nbsp;</div>`));
-    const st = statusOf(t.id);
-    const a = h(`<a class="${t.id===current?"active":""}"><span class="dot ${st==="pending"?"":st}"></span>${t.icon} ${t.name}</a>`);
-    a.onclick = ()=>go(t.id);
-    nav.appendChild(a);
+    if(t.adv && !TESTS[i-1].adv) nav.append(h(`<span class="sep"></span>`));
+    if(t.id==="relatorio") nav.append(h(`<span class="sep"></span>`));
+    const st=t.home?"":statusOf(t.id);
+    const a=h(`<a class="${t.id===current?"active":""}">${t.id==="inicio"?ico("home"):""}${t.short||t.name}<span class="st ${st}"></span></a>`);
+    a.onclick=()=>go(t.id); nav.append(a);
   });
+  const act=nav.querySelector(".active"); if(act) act.scrollIntoView({block:"nearest",inline:"nearest"});
+  const n=doneCount(), p=Math.round(100*n/STEPS.length);
+  $("#ring").style.setProperty("--p",p); $("#ringN").textContent=n+"/"+STEPS.length; $("#progLbl").textContent="Progresso da vistoria";
+  const th=$("#theme"); th.innerHTML="";
+  [["light","sun","Claro"],["dark","moon","Escuro"]].forEach(([k,ic,l])=>{ const b=h(`<button class="${theme===k?"on":""}" title="${l}">${ico(ic)}<span class="tl">${l}</span></button>`);
+    b.onclick=()=>{ theme=k; document.documentElement.dataset.theme=k; try{localStorage.setItem("mbc-theme",k);}catch(e){} renderChrome(); if(current==="trackpad") go("trackpad"); }; th.append(b); });
 }
+function pageHead(m,id,sub){
+  const t=TESTS.find(x=>x.id===id), idx=STEPS.indexOf(t);
+  const el=h(`<div class="ph"><button class="circle" title="Voltar ao início">${ico("back")}</button>
+    <div><h1>${t.name}</h1>${sub?`<p>${sub}</p>`:""}</div>${idx>=0?`<span class="step">${t.adv?"Avançado · ":""}Etapa ${idx+1} de ${STEPS.length}</span>`:""}</div>`);
+  el.querySelector(".circle").onclick=()=>go("inicio");
+  m.append(el);
+}
+function nextOf(id){ const i=TESTS.findIndex(t=>t.id===id); return TESTS[i+1]; }
 function verdict(id){
-  const st = state.results[id];
-  const el = h(`<div class="verdict"><span>Resultado:</span>
-    <button class="${st==="ok"?"ok":""}">✓ Funcionou</button>
-    <button class="${st==="fail"?"fail":""}">✗ Tem problema</button>
-    <span style="flex:1"></span><button class="primary">Próximo →</button></div>`);
-  const [b1,b2,b3] = el.querySelectorAll("button");
+  const st=state.results[id], nx=nextOf(id);
+  const el=h(`<div class="verdict"><span class="q">Como foi?</span>
+    <button class="btn ${st==="ok"?"okb":""}">${ico("check")}Tudo certo</button>
+    <button class="btn ${st==="fail"?"failb":""}">${ico("x")}Tem defeito</button>
+    <span class="spacer"></span>${nx?`<button class="btn primary">${nx.id==="relatorio"?"Ver relatório":"Próximo: "+nx.name}${ico("next")}</button>`:""}</div>`);
+  const [b1,b2,b3]=el.querySelectorAll("button");
   b1.onclick=()=>setResult(id,"ok"); b2.onclick=()=>setResult(id,"fail");
-  b3.onclick=()=>{ const i=TESTS.findIndex(t=>t.id===id); go(TESTS[i+1].id); };
+  if(b3) b3.onclick=()=>go(nx.id);
   return el;
 }
 function go(id){
@@ -203,11 +374,13 @@ function go(id){
   current=id; history.replaceState(null,"","#"+id);
   const main=$("#main"); main.innerHTML="";
   PAGES[id](main);
-  renderNav(); window.scrollTo(0,0);
+  renderChrome(); window.scrollTo(0,0);
 }
 
-/* ---------------- sistema ---------------- */
-function fmtCores(v){ const m=String(v||"").match(/(\d+):(\d+):(\d+)/); return m?`${m[1]} (${m[2]} desempenho + ${m[3]} eficiência)`:v; }
+/* ================= ficha do mac ================= */
+const BATT_PT={"good":"Boa","normal":"Boa","fair":"Razoável","poor":"Ruim","service recommended":"Troca recomendada","replace soon":"Trocar em breve","replace now":"Trocar agora","service battery":"Precisa de manutenção","check battery":"Verificar bateria"};
+const SMART_PT={"verified":"Saudável","failing":"Falhando","not supported":"Sem informação","about to fail":"Prestes a falhar"};
+function fmtCores(v){ const m=String(v||"").match(/(\d+):(\d+):(\d+)/); return m?`${m[1]} núcleos (${m[2]} de desempenho e ${m[3]} de eficiência)`:(v?v+" núcleos":""); }
 function sysData(){
   const S = window.SYSINFO; if(!S) return null;
   const sp = S.sp || {};
@@ -217,96 +390,137 @@ function sysData(){
   const bh = pw.sppower_battery_health_info || {};
   const io = {};
   (S.batteryIoreg||"").split("\n").forEach(l=>{ const m=l.match(/"(\w+)" = (\d+)/); if(m) io[m[1]]=+m[2]; });
-  let maxCap = bh.sppower_battery_health_maximum_capacity || "";
-  if(!maxCap && io.DesignCapacity && (io.AppleRawMaxCapacity||io.MaxCapacity>100)){
-    maxCap = Math.round(100*(io.AppleRawMaxCapacity||io.MaxCapacity)/io.DesignCapacity)+"%";
-  }
+  let maxCap = parseInt(bh.sppower_battery_health_maximum_capacity) || NaN;
+  if(isNaN(maxCap) && io.DesignCapacity && (io.AppleRawMaxCapacity||io.MaxCapacity>100))
+    maxCap = Math.round(100*(io.AppleRawMaxCapacity||io.MaxCapacity)/io.DesignCapacity);
   const storage = (sp.SPStorageDataType||[]).find(v=>v.mount_point==="/") || (sp.SPStorageDataType||[])[0] || {};
   const nvme = ((sp.SPNVMeDataType||[])[0]||{})._items?.[0] || {};
   const smart = (storage.physical_drive||{}).smart_status || nvme.smart_status || (S.smartDiskutil||"").split(":").slice(1).join(":").trim();
   const disp = ((sp.SPDisplaysDataType||[])[0]||{}).spdisplays_ndrvs || [];
   const internal = disp.find(d=>/internal|built-in/i.test((d.spdisplays_connection_type||"")+(d.spdisplays_display_type||"")+(d._name||""))) || disp[0] || {};
+  const res = (internal._spdisplays_resolution || internal.spdisplays_resolution || "").replace(/ x /," × ").replace(/Retina/,"(Retina)");
   const cams = (sp.SPCameraDataType||[]).map(c=>c._name).join(", ");
-  const gb = b => b ? (b/1e9).toFixed(0)+" GB" : "";
+  const gb = b => b ? Math.round(b/1e9)+" GB" : "";
   const al = hw.activation_lock_status || "";
+  const alEnabled = /enabled/i.test(al), mdm=S.mdm||"";
+  const mdmYes = /MDM enrollment: Yes|Enrolled via DEP: Yes/i.test(mdm);
+  const cond = bh.sppower_battery_health || "";
+  const cycles = +(bh.sppower_battery_cycle_count ?? io.CycleCount ?? NaN);
   return {
+    model: hw.machine_name||"Mac", chip: hw.chip_type || hw.cpu_type || "", ram: hw.physical_memory||"", disk: gb(storage.size_in_bytes),
     rows:[
       ["Modelo", [hw.machine_name, hw.model_number].filter(Boolean).join(" · ")],
       ["Identificador", hw.machine_model],
-      ["Chip / processador", hw.chip_type || [hw.cpu_type, hw.current_processor_speed].filter(Boolean).join(" ")],
+      ["Processador", hw.chip_type || [hw.cpu_type, hw.current_processor_speed].filter(Boolean).join(" ")],
       ["Núcleos", fmtCores(hw.number_processors)],
-      ["Memória (RAM)", hw.physical_memory],
+      ["Memória RAM", hw.physical_memory],
       ["Armazenamento", [gb(storage.size_in_bytes), storage.free_space_in_bytes ? gb(storage.free_space_in_bytes)+" livres":""].filter(Boolean).join(" · ")],
       ["Número de série", hw.serial_number],
-      ["macOS", sw.os_version],
-      ["Tela", [internal._name, internal._spdisplays_resolution || internal.spdisplays_resolution].filter(Boolean).join(" · ")],
+      ["Sistema", (sw.os_version||"").replace(/\s*\(.*\)/,"")],
+      ["Tela", [/color lcd|built-in/i.test(internal._name||"")?"Tela integrada":internal._name, res].filter(Boolean).join(" · ")],
       ["Câmera", cams],
-      ["Ciclos da bateria", bh.sppower_battery_cycle_count ?? io.CycleCount],
-      ["Condição da bateria", bh.sppower_battery_health],
-      ["Capacidade máxima", maxCap],
-      ["Saúde do SSD (S.M.A.R.T.)", smart],
-      ["Bloqueio de Ativação", al.replace("activation_lock_","")],
-      ["Gerenciamento (MDM)", (S.mdm||"").replace(/\n/g," · ")],
+      ["Ciclos de carga", isNaN(cycles)?"":cycles],
+      ["Condição da bateria", BATT_PT[cond.toLowerCase()]||cond],
+      ["Capacidade da bateria", isNaN(maxCap)?"":maxCap+"% da original"],
+      ["Saúde do SSD", SMART_PT[String(smart).toLowerCase()]||smart],
+      ["Bloqueio de Ativação (iCloud)", al ? (alEnabled?"Ligado ⚠️":"Desligado ✓") : ""],
+      ["Gerenciado por empresa", mdm ? (mdmYes?"Sim ⚠️":"Não ✓") : ""],
     ].filter(r=>r[1]!==undefined && r[1]!==""),
-    cycles: +(bh.sppower_battery_cycle_count ?? io.CycleCount ?? NaN),
-    condition: bh.sppower_battery_health || "",
-    maxCap: parseInt(maxCap) || NaN,
-    smart, al, mdm: S.mdm||"", serial: hw.serial_number||"", raw:S, generatedAt:S.generatedAt
+    cycles, condition:cond, maxCap, smart, alEnabled, mdmYes, raw:S, generatedAt:S.generatedAt
   };
 }
 function sysAlerts(d){
   const a=[];
-  if(/enabled/i.test(d.al)) a.push(["bad","🔒 Bloqueio de Ativação LIGADO. O Mac está preso à conta iCloud de alguém. Só compre se o vendedor sair da conta e desligar o Buscar Mac na sua frente."]);
-  if(/MDM enrollment: Yes|Enrolled via DEP: Yes/i.test(d.mdm)) a.push(["bad","🏢 Este Mac é gerenciado por uma empresa (MDM). Ele pode ser bloqueado ou apagado remotamente."]);
-  if(d.smart && !/verified|verificado/i.test(d.smart)) a.push(["bad","💾 O SSD não passou no S.M.A.R.T. ("+d.smart+"). Risco de falha de disco."]);
-  if(d.condition && !/normal|good/i.test(d.condition)) a.push(["warn","🔋 Condição da bateria: "+d.condition+". Provavelmente precisa trocar."]);
-  if(d.maxCap && d.maxCap<80) a.push(["warn","🔋 A capacidade máxima está em "+d.maxCap+"%. Abaixo de 80% a Apple recomenda trocar a bateria."]);
-  if(d.cycles>1000) a.push(["warn","🔋 "+d.cycles+" ciclos. Passou do limite de 1000 da Apple."]);
-  else if(d.cycles>700) a.push(["warn","🔋 "+d.cycles+" ciclos. É bastante uso; negocie o preço."]);
-  if(!a.length) a.push(["good","Nenhum problema encontrado nos dados do sistema."]);
+  if(d.alEnabled) a.push(["bad","<b>Bloqueio de Ativação ligado.</b> O Mac está preso à conta iCloud de alguém. Só compre se o vendedor sair da conta e desligar o Buscar Mac na sua frente."]);
+  if(d.mdmYes) a.push(["bad","<b>Mac de empresa.</b> Ele é gerenciado à distância e pode ser bloqueado ou apagado a qualquer momento."]);
+  if(d.smart && !/verified/i.test(d.smart)) a.push(["bad","<b>SSD com problema</b> ("+esc(SMART_PT[String(d.smart).toLowerCase()]||d.smart)+"). Risco de perder tudo."]);
+  if(d.condition && !/normal|good/i.test(d.condition)) a.push(["warn","<b>Bateria:</b> "+esc(BATT_PT[d.condition.toLowerCase()]||d.condition)+". Conte com o custo da troca."]);
+  if(d.maxCap && d.maxCap<80) a.push(["warn","<b>Bateria em "+d.maxCap+"%</b> da capacidade original. Abaixo de 80% a Apple recomenda trocar."]);
+  if(d.cycles>1000) a.push(["warn","<b>"+d.cycles+" ciclos de carga.</b> Passou do limite de 1.000 que a Apple indica."]);
+  else if(d.cycles>700) a.push(["warn","<b>"+d.cycles+" ciclos de carga.</b> Já é bastante uso. Dá pra negociar o preço."]);
+  if(!a.length) a.push(["good","Nada de errado nos dados do sistema. Bateria, SSD e bloqueios estão em ordem."]);
   return a;
 }
+function batteryColor(p){ return p>=85?"var(--ok)":p>=80?"var(--warn)":"var(--fail)"; }
+const NO_DATA = `${note("warn","<b>Sem os dados do Mac.</b> Esta página não foi aberta pelo comando do Terminal.")}
+  <p>No Mac que você vai vistoriar, abra o <b>Terminal</b> e digite:</p>
+  <pre>curl -fsSL https://raw.githubusercontent.com/vianx7/macbook-checker/main/install.sh | bash</pre>
+  <p class="muted" style="margin-bottom:0">Sem Terminal? Os mesmos dados ficam em  → Sobre Este Mac → Mais Informações → Relatório do Sistema.</p>`;
+
 const PAGES = {};
 PAGES.sistema = m=>{
-  m.append(h(`<div><h2>🧾 Sistema e bateria</h2><p class="lead">Dados lidos direto do Mac pelo script do terminal.</p></div>`));
+  pageHead(m,"sistema","Dados lidos direto do Mac pelo comando do Terminal.");
   const d = sysData();
-  if(!d){
-    m.append(h(`<div class="card"><div class="alert warn">Sem dados de hardware. Esta página não foi aberta pelo script do terminal.</div>
-      <p>No Mac que você vai testar, abra o <b>Terminal</b> e rode:</p>
-      <pre>curl -fsSL https://raw.githubusercontent.com/vianx7/macbook-checker/main/install.sh | bash</pre>
-      <p class="muted">Se não puder usar o terminal, pegue os mesmos dados em  → Sobre Este Mac → Mais Informações → Relatório do Sistema (Bateria, Armazenamento, Hardware).</p></div>`));
-    m.append(verdict("sistema")); return;
-  }
-  const al = h(`<div class="card"></div>`);
-  sysAlerts(d).forEach(([c,t])=>al.append(h(`<div class="alert ${c}">${esc(t)}</div>`)));
+  if(!d){ m.append(h(`<div class="card">${NO_DATA}</div>`)); m.append(verdict("sistema")); return; }
+  const top=h(`<div class="grid g3" style="margin-bottom:14px"></div>`);
+  top.append(h(`<div class="card"><div class="label">Este Mac</div><div class="num" style="font-size:30px;margin:8px 0 6px">${esc(d.model)}</div><div class="muted">${esc([d.chip,d.ram,d.disk].filter(Boolean).join(" · "))}</div></div>`));
+  top.append(h(`<div class="card" style="display:flex;gap:18px;align-items:center">
+    <div class="gauge" style="--p:${isNaN(d.maxCap)?0:d.maxCap};--c:${batteryColor(d.maxCap)}"><div><b>${isNaN(d.maxCap)?"—":d.maxCap+"%"}</b><small>da original</small></div></div>
+    <div><div class="label">Bateria</div><div class="num" style="font-size:30px">${isNaN(d.cycles)?"—":d.cycles}</div><div class="muted">ciclos de carga</div></div></div>`));
+  const ok=!d.alEnabled && !d.mdmYes;
+  top.append(h(`<div class="card"><div class="label">Bloqueios</div><div class="num" style="font-size:30px;margin:8px 0 6px;color:${ok?"var(--ok)":"var(--fail)"}">${ok?"Livre":"Bloqueado"}</div><div class="muted">iCloud ${d.alEnabled?"ligado":"desligado"} · ${d.mdmYes?"Mac de empresa":"Mac pessoal"}</div></div>`));
+  m.append(top);
+  const al=h(`<div class="card"><h3>O que a vistoria encontrou</h3></div>`);
+  sysAlerts(d).forEach(([c,t])=>al.insertAdjacentHTML("beforeend",note(c,t)));
   m.append(al);
-  const tb = h(`<div class="card"><table></table><p class="muted" style="margin:10px 0 0">Lido em ${esc(d.generatedAt)}. Confira se o número de série bate com a caixa/nota fiscal e consulte em <b>checkcoverage.apple.com</b>.</p></div>`);
-  d.rows.forEach(([k,v])=>$("table",tb).append(h(`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`)));
+  const tb=h(`<div class="card"><h3>Ficha completa</h3><div class="kv"></div><p class="muted" style="margin:14px 0 0;font-size:13px">Lido em ${esc(d.generatedAt)}. Confira se o número de série bate com a caixa e veja a garantia em checkcoverage.apple.com.</p></div>`);
+  d.rows.forEach(([k,v])=>$(".kv",tb).insertAdjacentHTML("beforeend",`<div>${esc(k)}</div><div>${esc(v)}</div>`));
   m.append(tb);
-  m.append(h(`<details class="card"><summary class="muted" style="cursor:pointer">Ver dados brutos</summary><pre>${esc(JSON.stringify(d.raw,null,1))}</pre></details>`));
-  if(!state.results.sistema){ state.results.sistema = sysAlerts(d).some(x=>x[0]==="bad")?"fail":sysAlerts(d).some(x=>x[0]==="warn")?"warn":"ok"; save(); }
+  m.append(h(`<details class="card"><summary>Ver dados técnicos completos</summary><pre>${esc(JSON.stringify(d.raw,null,1))}</pre></details>`));
+  if(!state.results.sistema){ const al2=sysAlerts(d); state.results.sistema = al2.some(x=>x[0]==="bad")?"fail":al2.some(x=>x[0]==="warn")?"warn":"ok"; save(); }
   m.append(verdict("sistema"));
 };
 
-/* ---------------- teclado ---------------- */
+/* ================= início ================= */
+PAGES.inicio = m=>{
+  const d=sysData(), n=doneCount(), fails=STEPS.filter(t=>statusOf(t.id)==="fail").length;
+  const nextT=STEPS.find(t=>statusOf(t.id)==="pending");
+  m.append(h(`<div><p class="eyebrow">${n?"Bora continuar?":"Pronto pra começar?"}</p><h1 class="hello">${d?"Vistoria do "+esc(d.model):"Vistoria do MacBook"}</h1></div>`));
+  const g=h(`<div class="grid g4"></div>`);
+  g.append(h(`<div class="card"><div class="label">Progresso</div><div class="num" style="margin:10px 0 14px">${n}<small> de ${STEPS.length}</small></div>
+    <div class="ticks">${STEPS.map(t=>{const s=statusOf(t.id);return `<i class="${s==="ok"?"on":s==="fail"?"fail":s==="warn"?"warn":""}"></i>`;}).join("")}</div></div>`));
+  g.append(h(`<div class="card"><div class="label">Problemas encontrados</div><div class="num" style="margin:10px 0 6px;color:${fails?"var(--fail)":"inherit"}">${fails}</div><div class="muted">${fails?"Veja no relatório":"Nenhum até agora"}</div></div>`));
+  if(d){
+    g.append(h(`<div class="card" style="display:flex;gap:16px;align-items:center"><div class="gauge" style="--p:${isNaN(d.maxCap)?0:d.maxCap};--c:${batteryColor(d.maxCap)};width:92px;height:92px"><div style="width:74px;height:74px"><b style="font-size:20px">${isNaN(d.maxCap)?"—":d.maxCap+"%"}</b></div></div>
+      <div><div class="label">Bateria</div><div style="font-weight:600;font-size:18px">${isNaN(d.cycles)?"—":d.cycles} ciclos</div><div class="muted" style="font-size:13px">${esc(BATT_PT[(d.condition||"").toLowerCase()]||d.condition||"")}</div></div></div>`));
+    const ok=!d.alEnabled && !d.mdmYes;
+    g.append(h(`<div class="card"><div class="label">iCloud e empresa</div><div class="num" style="margin:10px 0 6px;font-size:32px;color:${ok?"var(--ok)":"var(--fail)"}">${ok?"Livre":"Bloqueado"}</div><div class="muted">${ok?"Pode ser formatado e usado":"Não compre assim"}</div></div>`));
+  } else {
+    g.append(h(`<div class="card" style="grid-column:span 2"><div class="label">Ficha do Mac</div><p style="margin:10px 0 0">Abra pelo comando do Terminal para ver bateria, SSD e bloqueios. Os outros testes funcionam normalmente.</p></div>`));
+  }
+  m.append(g);
+  if(d){ const bad=sysAlerts(d).filter(a=>a[0]==="bad"); if(bad.length){ const c=h(`<div class="card" style="margin-top:14px"></div>`); bad.forEach(([k,t])=>c.insertAdjacentHTML("beforeend",note(k,t))); m.append(c);} }
+  const cta=h(`<div class="row" style="margin:22px 0 0"><button class="btn primary lg">${nextT?(n?"Continuar: ":"Começar: ")+nextT.name:"Ver relatório final"}${ico("next")}</button><span class="muted">${nextT?"Leva uns 15 minutos no total.":"Tudo testado! 🎉"}</span></div>`);
+  cta.querySelector("button").onclick=()=>go(nextT?nextT.id:"relatorio"); m.append(cta);
+  const card=t=>{ const s=statusOf(t.id), i=STEPS.indexOf(t)+1, hl=nextT&&t.id===nextT.id;
+    const el=h(`<div class="card tcard ${hl?"hl":""}"><div class="row" style="justify-content:space-between"><div class="ticon">${ico(t.icon)}</div><button class="circle" style="width:36px;height:36px">${ico("arrow")}</button></div>
+      <div><div class="t">${i}. ${t.name}</div><div class="d">${t.desc}</div></div>
+      <div class="foot">${hl?`<span style="font-weight:600;font-size:13px">Próximo teste</span>`:`<span class="tag ${s}">${LBL[s]}</span>`}</div></div>`);
+    el.onclick=()=>go(t.id); return el; };
+  m.append(h(`<div class="section-t"><h2>Testes básicos</h2><span class="muted">faça primeiro</span></div>`));
+  const gb=h(`<div class="grid g4"></div>`); STEPS.filter(t=>!t.adv).forEach(t=>gb.append(card(t))); m.append(gb);
+  m.append(h(`<div class="section-t"><h2>Testes avançados</h2><span class="muted">deixe pro final</span></div>`));
+  const ga=h(`<div class="grid g4"></div>`); STEPS.filter(t=>t.adv).forEach(t=>ga.append(card(t))); m.append(ga);
+};
+
+/* ================= teclado ================= */
 const F = n=>({c:"F"+n,l:"F"+n,fn:1});
 const KB = [
   [{c:"Escape",l:"esc",fn:1,w:1.4},F(1),F(2),F(3),F(4),F(5),F(6),F(7),F(8),F(9),F(10),F(11),F(12)],
-  [["Backquote","`"],["Digit1","1"],["Digit2","2"],["Digit3","3"],["Digit4","4"],["Digit5","5"],["Digit6","6"],["Digit7","7"],["Digit8","8"],["Digit9","9"],["Digit0","0"],["Minus","-"],["Equal","="],{c:"Backspace",l:"delete",w:1.6}],
-  [{c:"Tab",l:"tab",w:1.6},..."QWERTYUIOP".split("").map(x=>["Key"+x,x]),["BracketLeft","["],["BracketRight","]"],{c:"Backslash",l:"\\",w:1.0}],
-  [{c:"CapsLock",l:"caps lock",w:1.9},..."ASDFGHJKL".split("").map(x=>["Key"+x,x]),["Semicolon",";"],["Quote","'"],{c:"Enter",l:"return",w:1.9}],
-  [{c:"ShiftLeft",l:"shift",w:2.5},..."ZXCVBNM".split("").map(x=>["Key"+x,x]),["Comma",","],["Period","."],["Slash","/"],{c:"ShiftRight",l:"shift",w:2.5}],
-  [{c:"Fn",l:"fn",opt:1},{c:"ControlLeft",l:"control"},{c:"AltLeft",l:"option"},{c:"MetaLeft",l:"command",w:1.3},{c:"Space",l:"",w:5.2},{c:"MetaRight",l:"command",w:1.3},{c:"AltRight",l:"option"},{c:"ArrowLeft",l:"◀"},{stack:[{c:"ArrowUp",l:"▲"},{c:"ArrowDown",l:"▼"}]},{c:"ArrowRight",l:"▶"}],
+  [["Backquote","`"],["Digit1","1"],["Digit2","2"],["Digit3","3"],["Digit4","4"],["Digit5","5"],["Digit6","6"],["Digit7","7"],["Digit8","8"],["Digit9","9"],["Digit0","0"],["Minus","-"],["Equal","="],{c:"Backspace",l:"⌫",w:1.6}],
+  [{c:"Tab",l:"⇥",w:1.6},..."QWERTYUIOP".split("").map(x=>["Key"+x,x]),["BracketLeft","["],["BracketRight","]"],{c:"Backslash",l:"\\",w:1.0}],
+  [{c:"CapsLock",l:"⇪",w:1.9},..."ASDFGHJKL".split("").map(x=>["Key"+x,x]),["Semicolon","Ç ;"],["Quote","'"],{c:"Enter",l:"↩",w:1.9}],
+  [{c:"ShiftLeft",l:"⇧",w:2.5},..."ZXCVBNM".split("").map(x=>["Key"+x,x]),["Comma",","],["Period","."],["Slash","/"],{c:"ShiftRight",l:"⇧",w:2.5}],
+  [{c:"Fn",l:"fn 🌐",opt:1},{c:"ControlLeft",l:"⌃"},{c:"AltLeft",l:"⌥"},{c:"MetaLeft",l:"⌘",w:1.3},{c:"Space",l:"",w:5.2},{c:"MetaRight",l:"⌘",w:1.3},{c:"AltRight",l:"⌥"},{c:"ArrowLeft",l:"◀"},{stack:[{c:"ArrowUp",l:"▲"},{c:"ArrowDown",l:"▼"}]},{c:"ArrowRight",l:"▶"}],
 ].map(r=>r.map(k=>Array.isArray(k)?{c:k[0],l:k[1]}:k));
 PAGES.teclado = m=>{
-  m.append(h(`<div><h2>⌨️ Teclado</h2><p class="lead">Aperte <b>todas</b> as teclas, uma por uma. Cada tecla que funcionar fica verde.</p></div>`));
-  m.append(h(`<div class="card"><div class="alert warn" style="margin-top:0">
-    <b>Dicas:</b> para a fileira F1–F12, segure <b>fn</b> (senão o Mac usa como brilho/volume e o navegador não vê).
-    Evite <b>⌘Q</b>, <b>⌘W</b> e <b>⌘Tab</b> — fecham ou trocam a janela. A tecla <b>fn</b> e o <b>Touch ID</b> não são detectáveis pelo navegador (teste o Touch ID em "Portas e físico").
-    Fique de olho em teclas que <b>repetem sozinhas</b> ou precisam de força: veja o histórico abaixo.</div>
-    <div class="kb" id="kb"></div>
-    <div class="row" style="margin-top:12px"><div class="progress"><i id="kbBar"></i></div><b id="kbCount"></b><button id="kbReset">Recomeçar</button></div>
-    <p id="keylog"></p><div id="kbExtra" class="muted"></div></div>`));
+  pageHead(m,"teclado","Aperte todas as teclas, uma por uma. Cada tecla que funcionar fica verde.");
+  m.append(h(`<div class="card">
+    ${note("info","Para F1 a F12, <b>segure o fn</b> (senão o Mac usa como brilho e volume). Evite <b>⌘Q</b>, <b>⌘W</b> e <b>⌘Tab</b>: elas fecham ou trocam a janela. As teclas fn e Touch ID o navegador não enxerga.")}
+    <div class="kb" id="kb" style="margin-top:14px"></div>
+    <div class="row" style="margin-top:16px"><div class="bar"><i id="kbBar"></i></div><b id="kbCount" style="min-width:70px;text-align:right"></b><button class="btn" id="kbReset">Recomeçar</button></div>
+    <div class="keylog" id="keylog"></div><div id="kbExtra" class="muted" style="font-size:13px"></div>
+    <p class="muted" style="font-size:13px;margin-bottom:0">Fique de olho em tecla que <b>repete sozinha</b>, que precisa de força ou que fica afundada.</p></div>`));
   const kbEl=$("#kb"), keys={}; const pressed=new Set(), extra=new Set();
   const mk = k=>{ const e=h(`<div class="k${k.fn?" fn":""}${k.opt?" opt":""}" style="flex-grow:${k.w||1}">${esc(k.l)}</div>`); keys[k.c]=e; return e; };
   KB.forEach(r=>{ const re=h(`<div class="kr"></div>`); r.forEach(k=>{
@@ -323,7 +537,7 @@ PAGES.teclado = m=>{
     e.preventDefault();
     const c = e.code || e.key; pressed.add(c);
     if(keys[c]) keys[c].classList.add("on","down"); else extra.add(c);
-    log.unshift(c+(e.repeat?" (repetindo)":"")); log.length=Math.min(log.length,12);
+    log.unshift((keys[c]?keys[c].textContent||"espaço":c)+(e.repeat?" (repetindo)":"")); log.length=Math.min(log.length,14);
     $("#keylog").textContent = "Últimas: "+log.join("  ·  "); upd(); };
   const ku = e=>{ const c=e.code||e.key; if(keys[c]) keys[c].classList.remove("down");
     if(c==="CapsLock"){ pressed.add(c); keys[c]?.classList.add("on"); upd(); }
@@ -334,28 +548,32 @@ PAGES.teclado = m=>{
   upd(); m.append(verdict("teclado"));
 };
 
-/* ---------------- tela ---------------- */
+/* ================= tela ================= */
 const SCREENS = [
-  ["#000","Preto — procure pontos acesos e vazamento de luz nas bordas"],
-  ["#fff","Branco — procure pontos escuros, manchas e amarelado"],
-  ["#f00","Vermelho — pixels que não acendem aparecem como pontos pretos"],
+  ["#000","Preto: procure pontinhos acesos e luz vazando nas bordas"],
+  ["#fff","Branco: procure pontos escuros, manchas e tom amarelado"],
+  ["#f00","Vermelho: pixel que não acende aparece como ponto preto"],
   ["#0f0","Verde"],["#00f","Azul"],
   ["#0ff","Ciano"],["#f0f","Magenta"],["#ff0","Amarelo"],
-  ["#808080","Cinza 50% — procure manchas e áreas mais claras/escuras"],
-  ["#202020","Cinza escuro — bom para ver manchas na tela"],
-  ["linear-gradient(90deg,#000,#fff)","Degradê — deve ser suave, sem faixas"],
-  ["linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)","Espectro de cores"],
-  ["repeating-conic-gradient(#000 0 25%,#fff 0 50%) 0 0/2px 2px","Xadrez fino — tremido ou listras indicam problema"],
+  ["#808080","Cinza médio: procure manchas e áreas mais claras ou escuras"],
+  ["#202020","Cinza escuro: o melhor pra ver mancha na tela"],
+  ["linear-gradient(90deg,#000,#fff)","Degradê: tem que ser suave, sem faixas"],
+  ["linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)","Arco-íris de cores"],
+  ["repeating-conic-gradient(#000 0 25%,#fff 0 50%) 0 0/2px 2px","Xadrez fino: tremido ou listras indicam problema"],
 ];
 PAGES.tela = m=>{
-  m.append(h(`<div><h2>🖥️ Tela e cores</h2><p class="lead">Abre a tela inteira em várias cores. Olhe com calma, de frente e de lado.</p></div>`));
-  const c = h(`<div class="card"><p>Coloque o brilho no <b>máximo</b>. Clique, aperte <b>espaço</b> ou <b>→</b> para a próxima cor e <b>←</b> para voltar. <b>esc</b> sai.</p>
-    <p class="muted">O que procurar: pixels mortos (sempre pretos), pixels presos (sempre de uma cor), manchas, faixas, vazamento de luz nas bordas, tela amarelada ou rosada num canto, riscos.</p>
-    <button class="primary" id="go">▶ Começar teste de tela</button><div class="swatches" id="sw"></div></div>`);
+  pageHead(m,"tela","A tela inteira vai ficar de várias cores. Olhe com calma, de frente e de lado.");
+  const c=h(`<div class="card">
+    <div class="grid g2" style="gap:24px"><div>
+      <h3>Como fazer</h3>
+      <p style="margin-top:0">Coloque o brilho no <b>máximo</b>. Clique, aperte <b>espaço</b> ou <b>→</b> para a próxima cor e <b>←</b> para voltar. <b>esc</b> sai.</p>
+      <button class="btn primary lg" id="go">${ico("play")}Começar teste de tela</button></div>
+    <div><h3>O que procurar</h3><p class="muted" style="margin:0">Pixel morto (sempre preto), pixel travado (sempre de uma cor), manchas, faixas, luz vazando nas bordas, canto amarelado ou rosado, riscos e trincas internas (comum no M1 Air).</p></div></div>
+    <div class="swatches" id="sw"></div></div>`);
   m.append(c);
   SCREENS.forEach(s=>$("#sw",c).append(h(`<i style="background:${s[0]}" title="${esc(s[1])}"></i>`)));
   const scr=$("#screen"), lbl=$("#screenLbl"); let i=0, t;
-  const show=()=>{ scr.style.background=SCREENS[i][0]; lbl.textContent=(i+1)+"/"+SCREENS.length+" · "+SCREENS[i][1];
+  const show=()=>{ scr.style.background=SCREENS[i][0]; lbl.textContent=(i+1)+" de "+SCREENS.length+" · "+SCREENS[i][1];
     lbl.style.opacity=1; clearTimeout(t); t=setTimeout(()=>lbl.style.opacity=0,2500); };
   const close=()=>{ scr.style.display="none"; window.removeEventListener("keydown",key); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); };
   const next=d=>{ i+=d; if(i>=SCREENS.length) return close(); if(i<0)i=0; show(); };
@@ -368,49 +586,52 @@ PAGES.tela = m=>{
   m.append(verdict("tela"));
 };
 
-/* ---------------- trackpad ---------------- */
-const TP_CHECKS=[["click","Clique"],["dbl","Duplo clique"],["right","Clique secundário (2 dedos)"],["drag","Arrastar (clique e arraste)"],["sv","Rolagem vertical (2 dedos)"],["sh","Rolagem horizontal (2 dedos)"],["pinch","Zoom de pinça"],["force","Force Touch (clique forte, só Safari)"],["cover","Passar por 90% da área"]];
+/* ================= trackpad ================= */
+const TP_CHECKS=[["click","Clique"],["dbl","Clique duplo"],["right","Clique com dois dedos"],["drag","Clicar e arrastar"],["sv","Rolar pra cima e pra baixo"],["sh","Rolar pros lados"],["pinch","Pinça (zoom)"],["force","Clique forte (só no Safari)"],["cover","Passar por 90% da área"]];
 PAGES.trackpad = m=>{
-  m.append(h(`<div><h2>👆 Trackpad</h2><p class="lead">Passe o cursor por <b>toda</b> a área abaixo e faça cada gesto. Áreas que não acendem podem indicar ponto morto.</p></div>`));
-  const c=h(`<div class="card"><div class="tp" id="tp"><canvas id="cv1"></canvas><canvas id="cv2"></canvas><div class="hint">mova, clique, arraste para desenhar, role com 2 dedos, faça pinça</div></div>
-    <div class="checks" id="tpc"></div><p class="muted" style="margin-bottom:0">Também teste fora daqui: o clique deve funcionar em <b>todo</b> o trackpad (inclusive cantos de cima) com o mesmo "clique" firme, sem chiado.</p></div>`);
+  pageHead(m,"trackpad","Passe o cursor por toda a área e faça cada gesto. Área que não acende pode ser ponto morto.");
+  const c=h(`<div class="card"><div class="tp" id="tp"><canvas id="cv1"></canvas><canvas id="cv2"></canvas><div class="hint">mova · clique · arraste pra desenhar · role com 2 dedos · faça pinça</div></div>
+    <div class="checks" id="tpc"></div><p class="muted" style="margin:14px 0 0;font-size:13px">Teste também fora daqui: o clique tem que funcionar em <b>todo</b> o trackpad, até nos cantos de cima, firme e sem chiado.</p></div>`);
   m.append(c);
   const done=new Set();
-  const renderC=()=>{ const el=$("#tpc"); el.innerHTML=""; TP_CHECKS.forEach(([k,l])=>el.append(h(`<div class="chk ${done.has(k)?"done":""}"><span class="dot ${done.has(k)?"ok":""}"></span>${l}</div>`)));
+  const renderC=()=>{ const el=$("#tpc"); el.innerHTML=""; TP_CHECKS.forEach(([k,l])=>el.append(h(`<div class="chk ${done.has(k)?"done":""}"><span class="b">${done.has(k)?ico("check"):""}</span>${l}</div>`)));
     if(TP_CHECKS.filter(x=>x[0]!=="force").every(x=>done.has(x[0])) && !state.results.trackpad) setResult("trackpad","ok"); };
   const mark=k=>{ if(!done.has(k)){ done.add(k); renderC(); } };
+  const css=getComputedStyle(document.documentElement), ACC=css.getPropertyValue("--accent").trim(), LIGHT=theme==="light";
   const tp=$("#tp"), c1=$("#cv1"), c2=$("#cv2"), x1=c1.getContext("2d"), x2=c2.getContext("2d");
   const COLS=16, ROWS=8, seen=new Set(); let W,H,dpr;
   const size=()=>{ dpr=devicePixelRatio||1; W=tp.clientWidth; H=tp.clientHeight; [c1,c2].forEach(cv=>{cv.width=W*dpr;cv.height=H*dpr;});
     x1.setTransform(dpr,0,0,dpr,0,0); x2.setTransform(dpr,0,0,dpr,0,0); grid(); };
   const grid=()=>{ x1.clearRect(0,0,W,H); const cw=W/COLS, ch=H/ROWS;
-    for(let r=0;r<ROWS;r++)for(let q=0;q<COLS;q++){ x1.fillStyle=seen.has(r*COLS+q)?"rgba(52,199,89,.22)":"rgba(255,255,255,.02)"; x1.fillRect(q*cw+1,r*ch+1,cw-2,ch-2); } };
+    for(let r=0;r<ROWS;r++)for(let q=0;q<COLS;q++){ const on=seen.has(r*COLS+q);
+      x1.fillStyle=on?ACC:(LIGHT?"rgba(0,0,0,.035)":"rgba(255,255,255,.03)"); x1.globalAlpha=on?.28:1;
+      x1.beginPath(); (x1.roundRect?x1.roundRect(q*cw+2,r*ch+2,cw-4,ch-4,6):x1.rect(q*cw+2,r*ch+2,cw-4,ch-4)); x1.fill(); }
+    x1.globalAlpha=1; };
   size(); const ro=new ResizeObserver(size); ro.observe(tp);
-  let down=false, last=null, scale=1;
+  let down=false, last=null, dragStart=[0,0];
   const pos=e=>{ const r=tp.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top]; };
   tp.addEventListener("mousemove",e=>{ const [x,y]=pos(e); const id=Math.min(ROWS-1,Math.floor(y/H*ROWS))*COLS+Math.min(COLS-1,Math.floor(x/W*COLS));
     if(!seen.has(id)){ seen.add(id); grid(); if(seen.size>=COLS*ROWS*0.9) mark("cover"); }
-    if(down&&last){ x2.strokeStyle="#4c8dff"; x2.lineWidth=3; x2.lineCap="round"; x2.beginPath(); x2.moveTo(...last); x2.lineTo(x,y); x2.stroke();
+    if(down&&last){ x2.strokeStyle=LIGHT?"#111":"#fff"; x2.lineWidth=3; x2.lineCap="round"; x2.beginPath(); x2.moveTo(...last); x2.lineTo(x,y); x2.stroke();
       if(Math.hypot(x-dragStart[0],y-dragStart[1])>60) mark("drag"); }
     last=[x,y]; });
-  let dragStart=[0,0];
   tp.addEventListener("mousedown",e=>{ if(e.button===0){down=true; last=pos(e); dragStart=last;} });
-  window.addEventListener("mouseup",()=>down=false);
+  const up=()=>down=false; window.addEventListener("mouseup",up);
   tp.addEventListener("click",()=>mark("click"));
   tp.addEventListener("dblclick",()=>{ mark("dbl"); x2.clearRect(0,0,W,H); });
   tp.addEventListener("contextmenu",e=>{ e.preventDefault(); mark("right"); });
   tp.addEventListener("wheel",e=>{ e.preventDefault();
-    if(e.ctrlKey){ mark("pinch"); scale=Math.max(.5,Math.min(2,scale-e.deltaY*0.01)); tp.style.transform=`scale(${1+(scale-1)*0.05})`; }
+    if(e.ctrlKey) mark("pinch");
     else if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ if(Math.abs(e.deltaY)>2) mark("sv"); }
     else if(Math.abs(e.deltaX)>2) mark("sh"); },{passive:false});
   tp.addEventListener("gesturechange",e=>{ e.preventDefault(); mark("pinch"); });
   tp.addEventListener("gesturestart",e=>e.preventDefault());
   tp.addEventListener("webkitmouseforcedown",()=>mark("force"));
-  cleanup=()=>ro.disconnect();
+  cleanup=()=>{ ro.disconnect(); window.removeEventListener("mouseup",up); };
   renderC(); m.append(verdict("trackpad"));
 };
 
-/* ---------------- áudio ---------------- */
+/* ================= som ================= */
 let actx=null;
 const ac=()=>{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==="suspended") actx.resume(); return actx; };
 function tone({pan=0,freq=440,dur=1.2,sweep=0,type="sine"}){
@@ -418,17 +639,17 @@ function tone({pan=0,freq=440,dur=1.2,sweep=0,type="sine"}){
   o.type=type; o.frequency.setValueAtTime(freq,t);
   if(sweep) o.frequency.exponentialRampToValueAtTime(sweep,t+dur);
   g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.35,t+.05); g.gain.setValueAtTime(.35,t+dur-.08); g.gain.linearRampToValueAtTime(0,t+dur);
-  let node=o.connect(g);
-  if(a.createStereoPanner){ const p=a.createStereoPanner(); p.pan.value=pan; node.connect(p); p.connect(a.destination); }
-  else node.connect(a.destination);
+  o.connect(g);
+  if(a.createStereoPanner){ const p=a.createStereoPanner(); p.pan.value=pan; g.connect(p); p.connect(a.destination); }
+  else g.connect(a.destination);
   o.start(t); o.stop(t+dur+.02); return o;
 }
-/* música de teste: gerada aqui mesmo (bateria, baixo, acordes e arpejo) */
+/* música de teste original, gerada aqui mesmo: bateria, baixo, acordes e arpejo */
 const Music=(()=>{
-  let a=null, master=null, panner=null, timer=0, step=0, next=0, noise=null, playing=false, pan=0, vol=.8;
-  const S=60/100/4;                                   // semicolcheia a 100 BPM
+  let a=null, master=null, panner=null, analyser=null, timer=0, step=0, next=0, noise=null, playing=false, pan=0, vol=.8;
+  const S=60/100/4;
   const mf=n=>440*Math.pow(2,(n-69)/12);
-  const PROG=[[36,[60,64,67]],[43,[59,62,67]],[45,[60,64,69]],[41,[60,65,69]]]; // C G Am F
+  const PROG=[[36,[60,64,67]],[43,[59,62,67]],[45,[60,64,69]],[41,[60,65,69]]];
   const ARP=[0,1,2,1,0,2,1,2];
   function note(t,f,d,type,g,lp){ const o=a.createOscillator(), e=a.createGain(); o.type=type; o.frequency.value=f;
     e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(g,t+.012); e.gain.exponentialRampToValueAtTime(.0001,t+d);
@@ -452,10 +673,10 @@ const Music=(()=>{
     }
   }
   return {
-    get playing(){ return playing; },
+    get playing(){ return playing; }, get analyser(){ return analyser; },
     start(){ if(playing) return; a=ac();
       if(!noise){ noise=a.createBuffer(1,a.sampleRate,a.sampleRate); const d=noise.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; }
-      master=a.createGain(); master.gain.value=vol*.55;
+      master=a.createGain(); master.gain.value=vol*.55; analyser=a.createAnalyser(); analyser.fftSize=64; master.connect(analyser);
       panner=a.createStereoPanner ? a.createStereoPanner() : null;
       if(panner){ panner.pan.value=pan; master.connect(panner); panner.connect(a.destination); } else master.connect(a.destination);
       step=0; next=a.currentTime+.06; tick(); timer=setInterval(tick,25); playing=true; },
@@ -466,205 +687,217 @@ const Music=(()=>{
   };
 })();
 PAGES.audio = m=>{
-  m.append(h(`<div><h2>🔊 Alto-falantes</h2><p class="lead">Toque a música e mande o som pra cada lado. <b>Sem fone.</b> Depois repita com fone para testar a saída P2.</p></div>`));
+  pageHead(m,"audio","Toque a música e mande o som pra cada lado. Primeiro sem fone, depois com fone.");
   const c=h(`<div class="card">
-    <div class="row"><button class="primary" id="play" style="font-size:17px;padding:12px 22px">▶ Tocar música</button>
-      <span class="big" id="side" style="margin-left:10px"></span></div>
-    <div class="row" style="margin-top:16px">
-      <button data-p="-1" style="flex:1;padding:16px">◀ Só ESQUERDO</button>
-      <button data-p="0" class="on" style="flex:1;padding:16px">◀ Os dois ▶</button>
-      <button data-p="1" style="flex:1;padding:16px">Só DIREITO ▶</button></div>
-    <div class="row" style="margin-top:12px"><button id="auto">🔁 Alternar sozinho (esq → dir → os dois)</button>
-      <span class="muted" style="margin-left:auto">Volume da música</span><input type="range" id="vol" min="0" max="1" step="0.05" value="0.8" style="width:160px"></div>
-    <div class="alert warn" style="margin-bottom:0"><b>Como ouvir:</b> comece com o volume do Mac em uns 50% e vá subindo até o <b>máximo</b> — é no volume alto que aparece o problema.
-      Preste atenção em <b>chiado, "rasgado", estalo ou vibração na carcaça</b>, principalmente nas batidas graves.
-      No "Só esquerdo" não pode sair nada do lado direito (e vice-versa). Os dois lados devem ter o <b>mesmo volume</b>.</div></div>`);
+    <div class="row"><button class="btn primary lg" id="play">${ico("play")}Tocar música</button>
+      <div class="eq" id="eq">${"<i></i>".repeat(14)}</div><span style="font-weight:600;font-size:17px" id="side"></span></div>
+    <div class="sides">
+      <div class="side" data-p="-1"><b>◀ Esquerdo</b><span>só o alto-falante da esquerda</span></div>
+      <div class="side on" data-p="0"><b>◀ Os dois ▶</b><span>som normal</span></div>
+      <div class="side" data-p="1"><b>Direito ▶</b><span>só o alto-falante da direita</span></div></div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="auto">${ico("repeat")}Alternar sozinho</button>
+      <span class="spacer"></span><span class="muted">Volume da música</span><input type="range" id="vol" min="0" max="1" step="0.05" value="0.8" style="width:170px"></div>
+    ${note("warn","<b>Como ouvir:</b> comece com o volume do Mac em 50% e vá subindo até o <b>máximo</b>, porque é no volume alto que o defeito aparece. Preste atenção em <b>chiado, som rasgado, estalo ou carcaça vibrando</b>, principalmente nas batidas graves. No \"Esquerdo\" não pode sair nada da direita (e vice-versa), e os dois lados têm que ter o mesmo volume.")}</div>`);
   m.append(c);
-  if(!Music.canPan) c.append(h(`<div class="alert bad">Este navegador não separa esquerdo/direito. Abra no Safari atualizado ou no Chrome.</div>`));
-  const LBL_SIDE={"-1":"🔈 Tocando só no ESQUERDO","0":"🔊 Tocando nos DOIS lados","1":"Tocando só no DIREITO 🔈"};
-  let pan=0, auto=0;
+  if(!Music.canPan) c.insertAdjacentHTML("beforeend",note("bad","Este navegador não separa esquerdo e direito. Use o Safari atualizado ou o Chrome."));
+  const SIDE={"-1":"Tocando só no esquerdo","0":"Tocando nos dois lados","1":"Tocando só no direito"};
+  let pan=0, auto=0, raf=0;
+  const bars=[...c.querySelectorAll("#eq i")];
+  const eq=()=>{ const an=Music.analyser; if(an&&Music.playing){ const d=new Uint8Array(an.frequencyBinCount); an.getByteFrequencyData(d);
+      bars.forEach((b,i)=>b.style.height=Math.max(12,d[i+1]/255*100)+"%"); } else bars.forEach(b=>b.style.height="12%"); raf=requestAnimationFrame(eq); };
+  eq();
   const setPan=p=>{ pan=p; Music.setPan(p); c.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("on",+b.dataset.p===p));
-    $("#side",c).textContent=Music.playing?LBL_SIDE[p]:""; };
-  const play=$("#play",c);
-  play.onclick=()=>{ if(Music.playing){ Music.stop(); play.textContent="▶ Tocar música"; clearInterval(auto); auto=0; $("#auto",c).classList.remove("on"); }
-    else { Music.start(); play.textContent="⏸ Parar"; } setPan(pan); };
-  c.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(!Music.playing) play.click(); clearInterval(auto); auto=0; $("#auto",c).classList.remove("on"); setPan(+b.dataset.p); });
-  $("#auto",c).onclick=()=>{ if(auto){ clearInterval(auto); auto=0; $("#auto",c).classList.remove("on"); return; }
-    if(!Music.playing) play.click(); const seq=[-1,1,0]; let i=0; setPan(seq[0]); $("#auto",c).classList.add("on");
+    $("#side",c).textContent=Music.playing?SIDE[p]:""; };
+  const play=$("#play",c), autoB=$("#auto",c);
+  const stopAuto=()=>{ clearInterval(auto); auto=0; autoB.classList.remove("on"); };
+  play.onclick=()=>{ if(Music.playing){ Music.stop(); play.innerHTML=ico("play")+"Tocar música"; stopAuto(); }
+    else { Music.start(); play.innerHTML=ico("pause")+"Parar"; } setPan(pan); };
+  c.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(!Music.playing) play.click(); stopAuto(); setPan(+b.dataset.p); });
+  autoB.onclick=()=>{ if(auto){ stopAuto(); return; }
+    if(!Music.playing) play.click(); const seq=[-1,1,0]; let i=0; setPan(seq[0]); autoB.classList.add("on");
     auto=setInterval(()=>{ i=(i+1)%3; setPan(seq[i]); },4800); };
   $("#vol",c).oninput=e=>Music.setVol(+e.target.value);
 
-  const t=h(`<div class="card"><p style="margin-top:0"><b>Testes extras</b> <span class="muted">(opcional)</span></p>
-    <div class="row"><button data-t="-1">Bip esquerdo</button><button data-t="1">Bip direito</button><button id="sweep">〰️ Varredura grave → agudo (10 s)</button><button id="bass">Grave forte (60 Hz)</button></div>
-    <p class="muted" style="margin-bottom:0">A varredura passa por todas as frequências: se em algum ponto o som "rasgar" ou a carcaça vibrar, o alto-falante tem defeito.</p></div>`);
+  const t=h(`<div class="card"><h3>Testes extras <span class="muted" style="font-weight:400">(se quiser)</span></h3>
+    <div class="row"><button class="btn" data-t="-1">Bipe esquerdo</button><button class="btn" data-t="1">Bipe direito</button><button class="btn" id="sweep">Do grave ao agudo (10 s)</button><button class="btn" id="bass">Grave forte (60 Hz)</button></div>
+    <p class="muted" style="margin:12px 0 0;font-size:13px">O "do grave ao agudo" passa por todos os tons. Se em algum momento o som rasgar ou a carcaça vibrar, o alto-falante tem defeito.</p></div>`);
   m.append(t);
   t.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>tone({pan:+b.dataset.t,freq:520,dur:1.2}));
   $("#sweep",t).onclick=()=>tone({freq:40,sweep:16000,dur:10});
   $("#bass",t).onclick=()=>tone({freq:60,dur:3});
-  cleanup=()=>{ Music.stop(); clearInterval(auto); };
+  cleanup=()=>{ Music.stop(); clearInterval(auto); cancelAnimationFrame(raf); };
   m.append(verdict("audio"));
 };
 
-/* ---------------- microfone ---------------- */
+/* ================= microfone e câmera ================= */
+function mediaErr(err,what){
+  const n=err&&err.name;
+  if(n==="NotAllowedError"||n==="SecurityError") return `Sem permissão para usar o ${what}. Libere em Ajustes do Sistema → Privacidade e Segurança → ${what==="microfone"?"Microfone":"Câmera"}, marque o navegador e recarregue a página.`;
+  if(n==="NotFoundError") return `Não encontrei nenhum ${what} neste Mac.`;
+  if(n==="NotReadableError") return `O ${what} está sendo usado por outro app (FaceTime, Zoom…). Feche e tente de novo.`;
+  return `Não consegui ligar o ${what}. Tente no Safari ou no Chrome.`;
+}
 PAGES.mic = m=>{
-  m.append(h(`<div><h2>🎙️ Microfone</h2><p class="lead">Fale normalmente: a barra deve se mexer. Depois grave e ouça.</p></div>`));
-  const c=h(`<div class="card"><div class="row"><button class="primary" id="start">Ligar microfone</button><button id="rec" disabled>⏺ Gravar 5 s</button><span id="msg" class="muted"></span></div>
-    <div class="meter" style="margin:16px 0"><i id="lvl"></i></div><audio id="play" controls style="width:100%;display:none"></audio>
-    <p class="muted" style="margin-bottom:0">A gravação deve sair limpa, sem chiado nem som abafado. Se o navegador não pedir permissão, libere em Ajustes do Sistema → Privacidade → Microfone.</p></div>`);
+  pageHead(m,"mic","Fale normalmente: a barra tem que se mexer. Depois grave e escute.");
+  const c=h(`<div class="card"><div class="row"><button class="btn primary lg" id="start">${ico("mic")}Ligar microfone</button><button class="btn lg" id="rec" disabled>● Gravar 5 segundos</button><span id="msg" class="muted"></span></div>
+    <div class="meter" style="margin:20px 0"><i id="lvl"></i></div><audio id="playb" controls style="width:100%;display:none"></audio>
+    <p class="muted" style="margin:0;font-size:13px">A gravação tem que sair limpa, sem chiado e sem som abafado.</p></div>`);
   m.append(c);
   let stream=null, raf=0;
   $("#start",c).onclick=async()=>{
     try{
       stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
       const a=ac(), src=a.createMediaStreamSource(stream), an=a.createAnalyser(); an.fftSize=1024; src.connect(an);
-      const buf=new Float32Array(an.fftSize); let peak=0;
+      const buf=new Float32Array(an.fftSize);
       const loop=()=>{ an.getFloatTimeDomainData(buf); let s=0; for(const v of buf) s+=v*v; const rms=Math.sqrt(s/buf.length);
-        const pct=Math.min(100,rms*400); $("#lvl").style.width=pct+"%"; if(pct>peak){peak=pct;} raf=requestAnimationFrame(loop); };
+        $("#lvl").style.width=Math.min(100,rms*400)+"%"; raf=requestAnimationFrame(loop); };
       loop(); $("#rec",c).disabled=false; $("#msg",c).textContent="Microfone ligado ✓";
-    }catch(err){ $("#msg",c).textContent="Não consegui acessar o microfone: "+err.message; }
+    }catch(err){ c.insertAdjacentHTML("afterbegin",note("bad",mediaErr(err,"microfone"))); }
   };
   $("#rec",c).onclick=()=>{
-    if(!window.MediaRecorder){ $("#msg",c).textContent="Este navegador não grava; use o Chrome ou o app Gravador de Voz."; return; }
+    if(!window.MediaRecorder){ $("#msg",c).textContent="Este navegador não grava. Use o Chrome ou o app Gravador."; return; }
     const r=new MediaRecorder(stream), chunks=[]; r.ondataavailable=e=>chunks.push(e.data);
-    r.onstop=()=>{ const au=$("#play",c); au.src=URL.createObjectURL(new Blob(chunks,{type:r.mimeType})); au.style.display="block"; au.play(); $("#msg",c).textContent="Ouça a gravação ↓"; };
-    r.start(); let n=5; $("#msg",c).textContent="Gravando... 5";
-    const iv=setInterval(()=>{ n--; if(n<=0){clearInterval(iv); r.stop();} else $("#msg",c).textContent="Gravando... "+n; },1000);
+    r.onstop=()=>{ const au=$("#playb",c); au.src=URL.createObjectURL(new Blob(chunks,{type:r.mimeType})); au.style.display="block"; au.play(); $("#msg",c).textContent="Escute a gravação ↓"; };
+    r.start(); let n=5; $("#msg",c).textContent="Gravando… 5";
+    const iv=setInterval(()=>{ n--; if(n<=0){clearInterval(iv); r.stop();} else $("#msg",c).textContent="Gravando… "+n; },1000);
   };
   cleanup=()=>{ cancelAnimationFrame(raf); stream&&stream.getTracks().forEach(t=>t.stop()); };
   m.append(verdict("mic"));
 };
-
-/* ---------------- câmera ---------------- */
 PAGES.camera = m=>{
-  m.append(h(`<div><h2>📷 Câmera</h2><p class="lead">A imagem deve aparecer nítida e a <b>luz verde</b> ao lado da câmera tem que acender.</p></div>`));
-  const c=h(`<div class="card"><div class="row" style="margin-bottom:14px"><button class="primary" id="on">Ligar câmera</button><span id="msg" class="muted"></span></div>
+  pageHead(m,"camera","A imagem tem que aparecer nítida e a luz verde ao lado da câmera tem que acender.");
+  const c=h(`<div class="card"><div class="row" style="margin-bottom:16px"><button class="btn primary lg" id="on">${ico("camera")}Ligar câmera</button><span id="msg" class="muted"></span></div>
     <video id="v" autoplay playsinline muted></video>
-    <p class="muted" style="margin-bottom:0">Procure manchas, imagem embaçada, cores estranhas ou listras. Se não ligar, veja Ajustes do Sistema → Privacidade → Câmera.</p></div>`);
+    <p class="muted" style="margin:14px 0 0;font-size:13px">Procure mancha, imagem embaçada, cor estranha ou listras.</p></div>`);
   m.append(c);
   let stream=null;
   $("#on",c).onclick=async()=>{ try{ stream=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720}}); $("#v",c).srcObject=stream;
-      const s=stream.getVideoTracks()[0].getSettings(); $("#msg",c).textContent=`Ligada ✓ ${s.width||""}×${s.height||""}`; }
-    catch(err){ $("#msg",c).textContent="Não consegui acessar a câmera: "+err.message; } };
+      const s=stream.getVideoTracks()[0].getSettings(); $("#msg",c).textContent=`Câmera ligada ✓ ${s.width||""}×${s.height||""}`; }
+    catch(err){ c.insertAdjacentHTML("afterbegin",note("bad",mediaErr(err,"câmera").replace("o câmera","a câmera").replace("nenhum câmera","nenhuma câmera").replace("O câmera","A câmera"))); } };
   cleanup=()=>{ stream&&stream.getTracks().forEach(t=>t.stop()); };
   m.append(verdict("camera"));
 };
 
-/* ---------------- servidor local (testes avançados) ---------------- */
+/* ================= servidor local (testes avançados) ================= */
 async function api(name,q){
   let r;
   try{ r=await fetch("/api/"+name+(q?"?"+q:""),{cache:"no-store"}); }catch(e){ throw new Error("sem servidor"); }
   if(!r.ok) throw new Error("sem servidor");
   try{ return await r.json(); }catch(e){ throw new Error("sem servidor"); }
 }
-const NO_SERVER=`<div class="alert warn">Este teste só funciona com a página aberta pelo comando do terminal (o servidorzinho local roda os testes).
-  Abra o Terminal e rode o comando do MacBook Checker de novo.</div>`;
-function setDetail(id,txt){ state.details[id]=txt; save(); }
+const NO_SERVER=note("warn","<b>Este teste precisa do comando do Terminal.</b> É ele que roda os testes por baixo. Abra o Terminal e rode o comando da Vistoria Mac de novo.");
 function fmtAgo(sec){ const d=Math.floor(sec/86400); return d<1?"hoje":d===1?"ontem":d<60?`há ${d} dias`:d<730?`há ${Math.round(d/30)} meses`:`há ${Math.round(d/365)} anos`; }
 function findAll(o,fn,out=[]){ if(o&&typeof o==="object"){ if(fn(o)) out.push(o); for(const k in o) findAll(o[k],fn,out); } return out; }
 
-/* ---------------- extras ---------------- */
+/* ================= portas e estado ================= */
 PAGES.extras = m=>{
-  m.append(h(`<div><h2>🔌 Portas e físico</h2><p class="lead">Primeiro as portas (a página detecta sozinha), depois o checklist do que dá pra ver com os olhos.</p></div>`));
-  const live=h(`<div class="card"><p style="margin-top:0"><b>⚡ Ao vivo:</b> plugue o carregador em <b>cada porta USB-C</b>, uma de cada vez, e veja se aparece "carregando". Depois plugue um pendrive, HD ou o seu celular em cada porta e veja se aparece na lista.</p>
-    <div class="stat"><div><b id="pw">…</b><span>Energia</span></div><div><b id="bt">…</b><span>Bateria</span></div><div><b id="wt">—</b><span>Carregador</span></div></div>
-    <div><span class="muted">Dispositivos USB conectados:</span> <span id="usb">…</span></div>
-    <p class="muted" style="margin-bottom:0">Obs.: com "Carregamento otimizado" ligado, o Mac pode segurar a bateria em 80% e mostrar "não está carregando" — normal. O importante é aparecer "Na tomada".</p></div>`);
+  pageHead(m,"extras","Primeiro as portas (a página detecta sozinha), depois o que dá pra ver no olho.");
+  const live=h(`<div class="card"><h3>${ico("bolt")}Portas ao vivo</h3>
+    <p class="muted" style="margin-top:-6px">Plugue o carregador em <b>cada porta USB-C</b>, uma de cada vez, e veja se aparece "Na tomada". Depois plugue um pendrive, HD ou o seu celular em cada porta e veja se ele aparece na lista.</p>
+    <div class="grid g3"><div class="card" style="background:var(--surface-2);box-shadow:none"><div class="label">Energia</div><div class="num" style="font-size:28px;margin-top:6px" id="pw">…</div></div>
+      <div class="card" style="background:var(--surface-2);box-shadow:none"><div class="label">Bateria</div><div class="num" style="font-size:28px;margin-top:6px" id="bt">…</div></div>
+      <div class="card" style="background:var(--surface-2);box-shadow:none"><div class="label">Carregador</div><div class="num" style="font-size:28px;margin-top:6px" id="wt">—</div></div></div>
+    <div style="margin-top:16px"><span class="label">Aparelhos USB conectados</span><div id="usb" style="margin-top:6px">…</div></div>
+    <p class="muted" style="margin:14px 0 0;font-size:13px">Com o "carregamento otimizado" ligado, o Mac pode segurar a bateria em 80% e dizer que não está carregando. É normal: o que importa é aparecer "Na tomada".</p></div>`);
   m.append(live);
-  let alive=true, timers=[];
+  let alive=true; const timers=[];
+  const ST={charging:"carregando",discharging:"descarregando",charged:"carregada","ac attached":"não está carregando","finishing charge":"quase cheia"};
   const pollPower=async()=>{ try{ const r=await api("power");
-      const ac=/AC Power/i.test(r.batt), pct=(r.batt.match(/(\d+)%/)||[])[1], st=((r.batt.match(/\d+%;\s*([^;]+);/)||[])[1]||"").trim();
+      const acp=/AC Power/i.test(r.batt), pct=(r.batt.match(/(\d+)%/)||[])[1], st=((r.batt.match(/\d+%;\s*([^;]+);/)||[])[1]||"").trim().toLowerCase();
       const w=(r.ac.match(/Wattage\s*=\s*(\d+)/i)||[])[1];
-      const ST={charging:"carregando",discharging:"descarregando",charged:"carregada","AC attached":"na tomada, não está carregando","finishing charge":"terminando a carga"};
-      $("#pw",live).innerHTML=ac?`<span style="color:var(--ok)">🔌 Na tomada</span>`:"🔋 Na bateria";
-      $("#bt",live).textContent=(pct?pct+"% ":"")+(ST[st]||st);
-      $("#wt",live).textContent=ac&&w?w+" W":"—";
-    }catch(e){ live.innerHTML=NO_SERVER; alive=false; } };
+      $("#pw",live).innerHTML=acp?`<span style="color:var(--ok)">Na tomada</span>`:"Na bateria";
+      $("#bt",live).innerHTML=(pct?pct+"%":"—")+(st?` <small>${esc(ST[st]||st)}</small>`:"");
+      $("#wt",live).textContent=acp&&w?w+" W":"—";
+    }catch(e){ live.innerHTML=`<h3>${ico("bolt")}Portas ao vivo</h3>`+NO_SERVER; alive=false; } };
   const pollUsb=async()=>{ if(!alive) return; try{ const r=await api("usb"); let names=[];
       try{ const j=JSON.parse(r.json||"{}"); names=findAll(j,o=>o._name && !o._items && !/bus|controller|hub|root/i.test(o._name)).map(o=>o._name); }catch(e){}
-      $("#usb",live).innerHTML=names.length?names.map(n=>`<span class="pill">${esc(n)}</span>`).join(" "):"<span class='muted'>nenhum</span>";
+      const el=$("#usb",live); if(el) el.innerHTML=names.length?names.map(n=>`<span class="pill">${ico("usb")}${esc(n)}</span>`).join(""):"<span class='muted'>Nenhum por enquanto</span>";
     }catch(e){} };
   pollPower(); pollUsb(); timers.push(setInterval(pollPower,2500), setInterval(pollUsb,4000));
   cleanup=()=>timers.forEach(clearInterval);
 
-  const c=h(`<div class="card"></div>`); m.append(c);
-  const draw=()=>{ c.innerHTML=""; MANUAL.forEach(([k,t,d])=>{ const v=state.manual[k];
-    const row=h(`<div class="mitem"><div class="t">${esc(t)}<small>${esc(d)}</small></div><div class="seg">
-      <button class="${v==="ok"?"ok":""}">✓ OK</button><button class="${v==="fail"?"fail":""}">✗ Problema</button><button class="${v==="na"?"ok":""}" title="Não se aplica">N/A</button></div></div>`);
+  const c=h(`<div class="card"><h3>Checklist</h3><div id="ml"></div></div>`); m.append(c);
+  const draw=()=>{ const l=$("#ml",c); l.innerHTML=""; MANUAL.forEach(([k,t,d])=>{ const v=state.manual[k];
+    const row=h(`<div class="mitem"><div class="t">${esc(t)}<small>${esc(d)}</small></div><div class="mini">
+      <button class="${v==="ok"?"ok":""}">OK</button><button class="${v==="fail"?"fail":""}">Defeito</button><button class="${v==="na"?"na":""}">Não tem</button></div></div>`);
     const [a,b,n]=row.querySelectorAll("button");
     a.onclick=()=>{state.manual[k]="ok";save();draw();}; b.onclick=()=>{state.manual[k]="fail";save();draw();}; n.onclick=()=>{state.manual[k]="na";save();draw();};
-    c.append(row); }); };
+    l.append(row); }); };
   draw();
-  const nx=h(`<div class="verdict"><span class="muted">Básico pronto! Agora os testes avançados.</span><span style="flex:1"></span><button class="primary">Próximo →</button></div>`);
+  const nx=h(`<div class="verdict"><span class="q">Básico concluído!</span><span class="muted">Agora os testes avançados.</span><span class="spacer"></span><button class="btn primary">Próximo: Travamentos${ico("next")}</button></div>`);
   nx.querySelector("button").onclick=()=>go("travamentos"); m.append(nx);
 };
 
-/* ---------------- travamentos ---------------- */
+/* ================= travamentos ================= */
 PAGES.travamentos = m=>{
-  m.append(h(`<div><h2>💥 Travamentos</h2><p class="lead">Procura no Mac registros de <b>kernel panic</b> — quando ele trava e reinicia sozinho. É o melhor jeito de achar defeito de placa que o vendedor não conta.</p></div>`));
+  pageHead(m,"travamentos","Procura registros de quando o Mac travou feio e reiniciou sozinho. É o melhor jeito de achar defeito de placa que o vendedor não conta.");
   const c=h(`<div class="card"><p class="muted" style="margin:0">Verificando…</p></div>`); m.append(c);
   api("panics").then(r=>{
     const recent=r.panics.filter(p=>r.now-p.time<90*86400);
     const setupAgo=r.setupDone? r.now-r.setupDone : null;
-    let html="";
-    if(!r.readable) html+=`<div class="alert warn">Não consegui ler a pasta de relatórios (o usuário logado não é administrador). Resultado inconclusivo.</div>`;
-    else if(!r.panics.length) html+=`<div class="alert good">Nenhum kernel panic registrado. 👍</div>`;
-    else if(recent.length) html+=`<div class="alert bad">${recent.length} travamento(s) nos últimos 3 meses. Pergunte ao vendedor e desconfie: pode ser defeito de placa, memória ou SSD.</div>`;
-    else html+=`<div class="alert warn">${r.panics.length} travamento(s) antigo(s), nenhum nos últimos 3 meses.</div>`;
-    if(setupAgo!==null) html+=`<p>macOS configurado <b>${fmtAgo(setupAgo)}</b>${setupAgo<30*86400?` — <span style="color:var(--warn)">foi formatado há pouco, então o histórico está quase vazio e este teste diz pouco. Faça o teste de estresse com mais atenção.</span>`:"."}</p>`;
-    if(r.panics.length) html+=`<table>${r.panics.slice(0,12).map(p=>`<tr><td>${new Date(p.time*1000).toLocaleString("pt-BR")}</td><td>${esc(p.name)}</td></tr>`).join("")}</table>`;
-    html+=`<p class="muted">Travamentos de apps (não graves): ${r.crashes}</p>`;
-    if(r.reboots) html+=`<details><summary class="muted" style="cursor:pointer">Últimos desligamentos/reinícios</summary><pre>${esc(r.reboots)}</pre></details>`;
+    let html=`<div class="row" style="gap:30px;margin-bottom:6px"><div><div class="label">Reinícios por travamento</div><div class="num" style="color:${recent.length?"var(--fail)":r.panics.length?"var(--warn)":"var(--ok)"}">${r.panics.length}</div></div>
+      <div><div class="label">Nos últimos 3 meses</div><div class="num">${recent.length}</div></div><div><div class="label">Apps que fecharam sozinhos</div><div class="num">${r.crashes}</div></div></div>`;
+    if(!r.readable) html+=note("warn","Não consegui ler os registros (a conta aberta não é de administrador). Resultado inconclusivo.");
+    else if(!r.panics.length) html+=note("good","Nenhum travamento grave registrado.");
+    else if(recent.length) html+=note("bad",`<b>${recent.length>1?recent.length+" travamentos":"1 travamento"} nos últimos 3 meses.</b> Pergunte ao vendedor e desconfie: pode ser defeito de placa, memória ou SSD.`);
+    else html+=note("warn",`${r.panics.length>1?r.panics.length+" travamentos antigos":"1 travamento antigo"}, nenhum nos últimos 3 meses.`);
+    if(setupAgo!==null) html+=note(setupAgo<30*86400?"warn":"info",`O macOS foi configurado <b>${fmtAgo(setupAgo)}</b>.${setupAgo<30*86400?" Como foi formatado há pouco, o histórico está quase vazio e este teste diz pouco. Capriche no teste de estresse.":""}`);
+    if(r.panics.length) html+=`<div class="kv" style="margin-top:10px">${r.panics.slice(0,12).map(p=>`<div>${new Date(p.time*1000).toLocaleString("pt-BR")}</div><div class="faint" style="font-size:13px">${esc(p.name)}</div>`).join("")}</div>`;
+    if(r.reboots) html+=`<details style="margin-top:12px"><summary>Últimos desligamentos e reinícios</summary><pre>${esc(r.reboots)}</pre></details>`;
     c.innerHTML=html;
-    if(!state.results.travamentos && r.readable){ setResult("travamentos", recent.length?"fail":r.panics.length?"warn":"ok"); }
-    setDetail("travamentos", r.panics.length? `${r.panics.length} panic(s), ${recent.length} recente(s)` : "nenhum panic");
+    if(!state.results.travamentos && r.readable) setResult("travamentos", recent.length?"fail":r.panics.length?"warn":"ok");
+    setDetail("travamentos", r.panics.length? `${r.panics.length} travamento${r.panics.length>1?"s":""}, ${recent.length} recente${recent.length===1?"":"s"}` : "nenhum travamento");
   }).catch(()=>c.innerHTML=NO_SERVER);
   m.append(verdict("travamentos"));
 };
 
-/* ---------------- wi-fi ---------------- */
+/* ================= wi-fi ================= */
 PAGES.wifi = m=>{
-  m.append(h(`<div><h2>📶 Velocidade Wi-Fi</h2><p class="lead">Mede a internet pelo Wi-Fi do Mac com a ferramenta da própria Apple. Leva uns 20 segundos.</p></div>`));
-  const c=h(`<div class="card"><button class="primary" id="go">▶ Medir velocidade</button> <span class="muted" id="msg"></span>
-    <div class="stat" id="res"></div>
-    <p class="muted" style="margin-bottom:0">Depende da internet do lugar. Compare com o seu celular <b>no mesmo Wi-Fi</b> (fast.com): o Mac deve dar parecido ou mais. Muito abaixo = antena ou placa Wi-Fi com problema.</p></div>`);
+  pageHead(m,"wifi","Mede a internet pela antena do Mac com a ferramenta da própria Apple. Leva uns 20 segundos.");
+  const c=h(`<div class="card"><div class="row"><button class="btn primary lg" id="go">${ico("wifi")}Medir velocidade</button><span class="muted" id="msg"></span></div>
+    <div id="res" style="margin-top:16px"></div>
+    <p class="muted" style="margin:14px 0 0;font-size:13px">Depende da internet do lugar. Compare com o seu celular <b>no mesmo Wi-Fi</b> (fast.com): o Mac tem que dar parecido ou mais. Muito abaixo pode ser antena ou placa de Wi-Fi com problema.</p></div>`);
   m.append(c);
   $("#go",c).onclick=async()=>{ const b=$("#go",c); b.disabled=true; let n=0; const iv=setInterval(()=>$("#msg",c).textContent=`Medindo… ${++n}s`,1000);
     try{ const r=await api("wifi"); if(r.error) throw new Error(r.error);
-      const j=JSON.parse(r.json); const mb=x=>x?(x/1e6).toFixed(0):"—";
-      $("#res",c).innerHTML=`<div><b>${mb(j.dl_throughput)} Mbps</b><span>Download</span></div><div><b>${mb(j.ul_throughput)} Mbps</b><span>Upload</span></div>`+
-        (j.responsiveness||j.dl_responsiveness?`<div><b>${Math.round(j.responsiveness||j.dl_responsiveness)}</b><span>Resposta (RPM)</span></div>`:"");
-      $("#msg",c).textContent="Pronto ✓"; setDetail("wifi",`↓ ${mb(j.dl_throughput)} / ↑ ${mb(j.ul_throughput)} Mbps`);
+      const j=JSON.parse(r.json); const mb=x=>x?Math.round(x/1e6):"—";
+      const rpm=j.responsiveness||j.dl_responsiveness; const resp=rpm?(rpm>=1000?"Ótimo":rpm>=300?"Bom":"Lento"):"—";
+      $("#res",c).innerHTML=`<div class="grid g3"><div><div class="label">Download</div><div class="num">${mb(j.dl_throughput)}<small> Mbps</small></div></div>
+        <div><div class="label">Upload</div><div class="num">${mb(j.ul_throughput)}<small> Mbps</small></div></div>
+        <div><div class="label">Tempo de resposta</div><div class="num">${resp}</div></div></div>`;
+      $("#msg",c).textContent="Pronto ✓"; setDetail("wifi",`${mb(j.dl_throughput)} Mbps de download, ${mb(j.ul_throughput)} de upload`);
       if(!state.results.wifi && j.dl_throughput>1e6) setResult("wifi","ok");
-    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:`<div class="alert warn">${esc(e.message)} Está conectado num Wi-Fi?</div>`; }
+    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:note("warn",esc(e.message)+" O Mac está conectado num Wi-Fi?"); }
     clearInterval(iv); b.disabled=false; };
   m.append(verdict("wifi"));
 };
 
-/* ---------------- ssd ---------------- */
+/* ================= ssd ================= */
 PAGES.ssd = m=>{
-  m.append(h(`<div><h2>💾 Velocidade do SSD</h2><p class="lead">Grava um arquivo de 2 GB, mede a velocidade e apaga em seguida. Leva poucos segundos.</p></div>`));
-  const c=h(`<div class="card"><button class="primary" id="go">▶ Testar SSD</button> <span class="muted" id="msg"></span><div id="res"></div>
-    <p class="muted" style="margin-bottom:0">Referência para M1: <b>acima de 1.500 MB/s</b> é o normal (o de 256 GB é um pouco mais lento que os maiores). Abaixo de 500 MB/s, desconfie.</p></div>`);
+  pageHead(m,"ssd","Grava um arquivo de 2 GB, mede a velocidade e apaga em seguida. Leva poucos segundos.");
+  const c=h(`<div class="card"><div class="row"><button class="btn primary lg" id="go">${ico("disk")}Testar SSD</button><span class="muted" id="msg"></span></div><div id="res" style="margin-top:16px"></div>
+    <p class="muted" style="margin:14px 0 0;font-size:13px">Referência para o M1: <b>acima de 1.500 MB/s</b> é o normal (o de 256 GB é um pouco mais lento que os maiores). Abaixo de 500 MB/s, desconfie.</p></div>`);
   m.append(c);
   $("#go",c).onclick=async()=>{ const b=$("#go",c); b.disabled=true; $("#msg",c).textContent="Gravando 2 GB…";
     try{ const r=await api("ssd"); if(r.error) throw new Error(r.error);
       const v=Math.round(r.mbps), cls=v>=1500?"good":v>=500?"warn":"bad";
-      $("#res",c).innerHTML=`<div class="stat"><div><b>${v.toLocaleString("pt-BR")} MB/s</b><span>Gravação</span></div><div><b>${r.secs.toFixed(1)} s</b><span>para 2 GB</span></div></div>
-        <div class="alert ${cls}">${cls==="good"?"Velocidade normal. 👍":cls==="warn"?"Mais lento que o esperado. Feche outros apps e teste de novo.":"Muito lento: pode ser SSD desgastado ou com defeito."}</div>`;
-      $("#msg",c).textContent="Pronto ✓"; setDetail("ssd",`${v} MB/s`);
+      $("#res",c).innerHTML=`<div class="grid g3"><div><div class="label">Velocidade de gravação</div><div class="num">${v.toLocaleString("pt-BR")}<small> MB/s</small></div></div>
+        <div><div class="label">Tempo para 2 GB</div><div class="num">${r.secs.toFixed(1).replace(".",",")}<small> s</small></div></div></div>
+        ${note(cls,cls==="good"?"Velocidade normal.":cls==="warn"?"Mais lento que o esperado. Feche os outros apps e teste de novo.":"<b>Muito lento.</b> Pode ser SSD desgastado ou com defeito.")}`;
+      $("#msg",c).textContent="Pronto ✓"; setDetail("ssd",`${v.toLocaleString("pt-BR")} MB/s`);
       if(!state.results.ssd) setResult("ssd",cls==="good"?"ok":cls==="warn"?"warn":"fail");
-    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:`<div class="alert warn">${esc(e.message)}</div>`; }
+    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:note("warn",esc(e.message)); }
     b.disabled=false; };
   m.append(verdict("ssd"));
 };
 
-/* ---------------- estresse ---------------- */
+/* ================= estresse ================= */
 PAGES.estresse = m=>{
-  m.append(h(`<div><h2>🔥 Teste de estresse</h2><p class="lead">Coloca todos os núcleos do processador no máximo por 90 segundos. Mac com defeito costuma travar, reiniciar ou desligar aqui.</p></div>`));
-  const c=h(`<div class="card"><div class="alert warn" style="margin-top:0"><b>Antes:</b> ligue o carregador. Durante o teste o Mac vai <b>esquentar</b> (normal). No MacBook Pro a ventoinha acelera — deve fazer só barulho de vento, nunca de raspado. O MacBook Air não tem ventoinha.</div>
-    <button class="primary" id="go">▶ Começar (90 s)</button> <span class="muted" id="msg"></span>
-    <div class="row" style="margin-top:14px"><div class="progress"><i id="bar"></i></div><b id="left"></b></div>
-    <p class="muted" id="hb" style="margin-bottom:0"></p><div id="res"></div></div>`);
+  pageHead(m,"estresse","Coloca todos os núcleos do processador no máximo por 90 segundos. Mac com defeito costuma travar, reiniciar ou desligar aqui.");
+  const c=h(`<div class="card">${note("warn","<b>Antes de começar:</b> ligue o carregador. O Mac vai <b>esquentar</b>, e isso é normal. No MacBook Pro a ventoinha acelera: tem que fazer só barulho de vento, nunca de raspado. O MacBook Air não tem ventoinha.")}
+    <div class="row" style="margin-top:14px"><button class="btn primary lg" id="go">${ico("flame")}Começar (90 s)</button><span class="muted" id="msg"></span></div>
+    <div class="row" style="margin-top:18px"><div class="bar"><i id="bar"></i></div><b id="left" style="min-width:44px;text-align:right"></b></div>
+    <p class="muted" id="hb" style="margin:10px 0 0;font-size:13px"></p><div id="res"></div></div>`);
   m.append(c);
   let iv=0;
   $("#go",c).onclick=async()=>{ const b=$("#go",c), S=90; b.disabled=true; const t0=Date.now(); let worst=0, last=Date.now();
@@ -674,46 +907,62 @@ PAGES.estresse = m=>{
     $("#msg",c).textContent="Rodando… não feche esta página.";
     try{ const r=await api("stress","s="+S); if(r.error) throw new Error(r.error);
       const lim=(r.after.match(/CPU_Speed_Limit\s*=\s*(\d+)/)||[])[1];
-      $("#res",c).innerHTML=`<div class="alert good">Aguentou ${r.secs} s com ${r.cpus} núcleos no máximo sem travar. 👍</div>`+
-        (lim&&+lim<100?`<div class="alert warn">O Mac reduziu a velocidade para ${lim}% por temperatura.</div>`:"")+
-        `<p class="muted">Encoste a mão embaixo do Mac: quente é normal; <b>quente demais pra segurar</b> ou cheiro de queimado não é.</p>`;
-      $("#msg",c).textContent="Pronto ✓"; setDetail("estresse",`${r.secs}s, ${r.cpus} núcleos, sem travar`);
+      $("#res",c).innerHTML=note("good",`Aguentou ${r.secs} segundos com os ${r.cpus} núcleos no máximo, sem travar.`)+
+        (lim&&+lim<100?note("warn",`O Mac reduziu a velocidade para ${lim}% por causa da temperatura.`):"")+
+        `<p class="muted" style="font-size:13px">Encoste a mão embaixo do Mac: quente é normal. <b>Quente demais pra segurar</b> ou cheiro de queimado, não.</p>`;
+      $("#msg",c).textContent="Pronto ✓"; setDetail("estresse",`${r.secs} s com ${r.cpus} núcleos, sem travar`);
       if(!state.results.estresse) setResult("estresse","ok");
-    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:`<div class="alert warn">${esc(e.message)}</div>`; }
+    }catch(e){ $("#msg",c).textContent=""; $("#res",c).innerHTML=/sem servidor/.test(e.message)?NO_SERVER:note("warn",esc(e.message)); }
     clearInterval(iv); b.disabled=false; };
   cleanup=()=>clearInterval(iv);
   m.append(verdict("estresse"));
 };
 
-/* ---------------- relatório ---------------- */
-const LBL={ok:"✓ OK",fail:"✗ Problema",warn:"⚠ Atenção",pending:"— Não testado",na:"N/A"};
+/* ================= relatório ================= */
+function overall(){
+  const all=STEPS.map(t=>statusOf(t.id)), d=sysData();
+  const fails=all.filter(s=>s==="fail").length, warns=all.filter(s=>s==="warn").length, pend=all.filter(s=>s==="pending").length;
+  const critical=d&&(d.alEnabled||d.mdmYes);
+  if(critical) return {k:"fail",t:"Não compre",s:"O Mac está bloqueado por iCloud ou empresa."};
+  if(fails) return {k:"fail",t:"Tem defeito",s:`${fails} ${fails>1?"itens":"item"} com defeito. Use isso pra negociar ou desista.`};
+  if(pend) return {k:"pending",t:"Em andamento",s:pend>1?`Faltam ${pend} testes.`:"Falta 1 teste."};
+  if(warns) return {k:"warn",t:"Aprovado com ressalvas",s:"Funciona, mas tem pontos de atenção. Dá pra negociar."};
+  return {k:"ok",t:"Aprovado",s:"Tudo funcionando. Pode comprar tranquilo."};
+}
 function reportText(){
-  const d=sysData(); const L=[];
-  L.push("RELATÓRIO MACBOOK CHECKER — "+new Date().toLocaleString("pt-BR"));
-  if(d){ d.rows.forEach(([k,v])=>L.push(k+": "+v)); L.push(""); sysAlerts(d).forEach(a=>L.push("• "+a[1])); }
-  L.push(""); TESTS.filter(t=>t.id!=="relatorio"&&t.id!=="extras").forEach(t=>L.push(t.name+": "+LBL[statusOf(t.id)]+(state.details[t.id]?" ("+state.details[t.id]+")":"")));
-  L.push(""); MANUAL.forEach(([k,t])=>L.push(t+": "+LBL[state.manual[k]||"pending"]));
+  const d=sysData(), o=overall(); const L=[];
+  L.push("VISTORIA MAC — "+new Date().toLocaleString("pt-BR"),"Resultado: "+o.t+" — "+o.s,"");
+  if(d){ d.rows.forEach(([k,v])=>L.push(k+": "+v)); L.push(""); sysAlerts(d).forEach(a=>L.push("• "+a[1].replace(/<[^>]+>/g,""))); }
+  L.push(""); STEPS.filter(t=>t.id!=="extras").forEach(t=>L.push(t.name+": "+LBL[statusOf(t.id)]+(state.details[t.id]?" ("+state.details[t.id]+")":"")));
+  L.push("","Checklist:"); MANUAL.forEach(([k,t])=>L.push("  "+t+": "+LBL[state.manual[k]||"pending"]));
   if(state.notes) L.push("", "Observações: "+state.notes);
   return L.join("\n");
 }
 PAGES.relatorio = m=>{
-  const all=TESTS.filter(t=>t.id!=="relatorio").map(t=>statusOf(t.id));
-  const fails=all.filter(s=>s==="fail").length, pend=all.filter(s=>s==="pending").length;
-  m.append(h(`<div><h2>📋 Relatório</h2><p class="lead">${fails?`<b style="color:var(--fail)">${fails} item(ns) com problema.</b> Use isso para negociar ou desistir.`:pend?`Faltam ${pend} teste(s).`:`<b style="color:var(--ok)">Tudo certo!</b> Nenhum problema encontrado.`}</p></div>`));
-  const c=h(`<div class="card rep"><table></table></div>`); m.append(c);
-  const tb=$("table",c);
-  TESTS.filter(t=>t.id!=="relatorio").forEach(t=>{ const s=statusOf(t.id);
-    const r=h(`<tr><td>${t.icon} ${t.name}${state.details[t.id]?` <span class="muted">· ${esc(state.details[t.id])}</span>`:""}</td><td><span class="tag ${s}">${LBL[s]}</span></td></tr>`); r.style.cursor="pointer"; r.onclick=()=>go(t.id); tb.append(r); });
-  MANUAL.filter(([k])=>state.manual[k]==="fail").forEach(([k,t])=>tb.append(h(`<tr><td>&nbsp;&nbsp;↳ ${esc(t)}</td><td><span class="tag fail">✗ Problema</span></td></tr>`)));
-  const n=h(`<div class="card"><p style="margin-top:0">Observações (ex.: risco na tampa, tecla "E" dura):</p><textarea style="width:100%;min-height:80px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit"></textarea>
-    <div class="row" style="margin-top:12px"><button class="primary" id="copy">Copiar relatório</button><button id="print">Imprimir / salvar PDF</button><span style="flex:1"></span><button id="reset">Apagar tudo e recomeçar</button></div></div>`);
-  m.append(n);
-  const ta=$("textarea",n); ta.value=state.notes||""; ta.oninput=()=>{state.notes=ta.value; try{localStorage.setItem("mbc-state",JSON.stringify(state));}catch(e){}};
-  $("#copy",n).onclick=async()=>{ try{ await navigator.clipboard.writeText(reportText()); $("#copy",n).textContent="Copiado ✓"; }catch(e){ prompt("Copie:",reportText()); } };
-  $("#print",n).onclick=()=>window.print();
-  $("#reset",n).onclick=()=>{ if(confirm("Apagar todos os resultados?")){ state={results:{},manual:{},details:{},notes:""}; save(); go("sistema"); } };
+  pageHead(m,"relatorio","O resumo de tudo. Dá pra copiar e mandar no WhatsApp ou salvar em PDF.");
+  const o=overall(), n=doneCount(), p=Math.round(100*n/STEPS.length), col={ok:"var(--ok)",fail:"var(--fail)",warn:"var(--warn)",pending:"var(--muted)"}[o.k];
+  m.append(h(`<div class="card score"><div class="gauge" style="--p:${p};--c:${col}"><div><b>${n}/${STEPS.length}</b><small>testados</small></div></div>
+    <div><div class="label">Resultado da vistoria</div><div class="big" style="color:${col};margin:6px 0">${o.t}</div><div class="muted">${o.s}</div></div></div>`));
+  const g=h(`<div class="grid g2"></div>`);
+  const mk=(title,list)=>{ const c=h(`<div class="card"><h3>${title}</h3></div>`); list.forEach(t=>{ const s=statusOf(t.id);
+    const r=h(`<div class="rl"><div class="ticon">${ico(t.icon)}</div><div class="n">${t.name}${state.details[t.id]?`<small>${esc(state.details[t.id])}</small>`:""}</div><span class="tag ${s}">${LBL[s]}</span></div>`);
+    r.onclick=()=>go(t.id); c.append(r); }); return c; };
+  g.append(mk("Testes básicos",STEPS.filter(t=>!t.adv)));
+  const right=mk("Testes avançados",STEPS.filter(t=>t.adv));
+  const bad=MANUAL.filter(([k])=>state.manual[k]==="fail");
+  if(bad.length){ right.insertAdjacentHTML("beforeend",`<h3 style="margin-top:20px">Defeitos do checklist</h3>`); bad.forEach(([k,t])=>right.insertAdjacentHTML("beforeend",`<div class="rl" style="cursor:default"><div class="n">${esc(t)}</div><span class="tag fail">Com defeito</span></div>`)); }
+  g.append(right); m.append(g);
+  const nt=h(`<div class="card" style="margin-top:14px"><h3>Observações</h3><textarea placeholder="Ex.: risco na tampa, tecla E meio dura, vendedor aceitou baixar R$ 300…"></textarea>
+    <div class="row" style="margin-top:14px"><button class="btn primary" id="copy">${ico("copy")}Copiar relatório</button><button class="btn" id="print">${ico("print")}Salvar em PDF</button><span class="spacer"></span><button class="btn" id="reset">Apagar tudo e recomeçar</button></div></div>`);
+  m.append(nt);
+  const ta=$("textarea",nt); ta.value=state.notes||""; ta.oninput=()=>{state.notes=ta.value; persist();};
+  $("#copy",nt).onclick=async()=>{ try{ await navigator.clipboard.writeText(reportText()); $("#copy",nt).innerHTML=ico("check")+"Copiado!"; }catch(e){ prompt("Copie o texto:",reportText()); } };
+  $("#print",nt).onclick=()=>window.print();
+  $("#reset",nt).onclick=()=>{ if(confirm("Apagar todos os resultados e começar de novo?")){ state={results:{},manual:{},details:{},notes:""}; save(); go("inicio"); } };
 };
 
+$("#brand").onclick=()=>go("inicio");
+$(".logo").innerHTML=ico("check");
 window.addEventListener("hashchange",()=>{ const id=location.hash.slice(1); if(id!==current && PAGES[id]) go(id); });
 go(current);
 </script>

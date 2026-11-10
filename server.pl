@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# MacBook Checker — servidor local mínimo (só módulos que já vêm no Perl do macOS).
+# Vistoria Mac — servidor local mínimo (só módulos que já vêm no Perl do macOS).
 # Serve a página em http://127.0.0.1 (libera câmera/microfone) e roda os testes
 # que o navegador não consegue fazer sozinho. Só aceita conexões deste Mac.
 use strict;

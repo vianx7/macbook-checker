@@ -1,5 +1,5 @@
 #!/bin/bash
-# MacBook Checker — lê o hardware deste Mac e abre a página de testes.
+# Vistoria Mac — lê o hardware deste Mac e abre a página de testes.
 # Uso: bash check.sh   (rode na pasta onde estão index.html e check.sh)
 
 set -u

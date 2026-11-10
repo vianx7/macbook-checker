@@ -1,12 +1,12 @@
 #!/bin/bash
-# Instalador do MacBook Checker. No terminal do Mac:
+# Instalador do Vistoria Mac. No terminal do Mac:
 #   curl -fsSL https://raw.githubusercontent.com/vianx7/macbook-checker/main/install.sh | bash
 set -e
 BASE="${MBC_BASE:-https://raw.githubusercontent.com/vianx7/macbook-checker/main}"
 DIR="${TMPDIR:-/tmp}/macbook-checker"
 
 mkdir -p "$DIR"
-echo "⬇️  Baixando o MacBook Checker..."
+echo "⬇️  Baixando o Vistoria Mac..."
 curl -fsSL "$BASE/index.html" -o "$DIR/index.html"
 curl -fsSL "$BASE/check.sh"   -o "$DIR/check.sh"
 curl -fsSL "$BASE/server.pl"  -o "$DIR/server.pl"

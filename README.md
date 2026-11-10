@@ -1,6 +1,6 @@
-# 💻 MacBook Checker
+# ✅ Vistoria Mac
 
-Teste um MacBook usado **antes de comprar**: teclado, tela, trackpad, alto-falantes, microfone, câmera, bateria, SSD e bloqueios de iCloud/empresa.
+Vistorie um MacBook usado **antes de comprar**: teclado, tela, trackpad, alto-falantes, microfone, câmera, bateria, SSD e bloqueios de iCloud/empresa.
 
 ## Como usar
 
@@ -10,9 +10,7 @@ No Mac que você vai testar, abra o **Terminal** (⌘ Espaço → "Terminal") e 
 curl -fsSL https://raw.githubusercontent.com/vianx7/macbook-checker/main/install.sh | bash
 ```
 
-> **Dica para não digitar o comando:** no Mac, abra o Safari em `github.com/vianx7/macbook-checker`, clique no botão de copiar ao lado do comando e cole no Terminal.
-
-O script lê o hardware do Mac, abre a página de testes no navegador e você vai seguindo o menu da esquerda. No final, o **Relatório** junta tudo (dá para copiar ou salvar em PDF). Quando terminar, aperte `Ctrl+C` no terminal.
+O script lê o hardware do Mac e abre a vistoria no navegador: um painel com tema claro e escuro, onde você segue os testes em ordem. No final, o **Relatório** junta tudo (dá para copiar ou salvar em PDF). Quando terminar, aperte `Ctrl+C` no terminal.
 
 Nada é instalado no Mac: os arquivos ficam numa pasta temporária, um servidorzinho em Perl (que já vem no macOS) roda só em `127.0.0.1` enquanto o terminal estiver aberto, e nenhum dado sai do computador.
 
